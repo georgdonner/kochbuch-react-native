@@ -1,5 +1,6 @@
 import { Navigation } from 'react-native-navigation';
-import registerScreens from './screens';
+import registerScreens from './app/screens';
+import colors from './app/config/colors';
 
 registerScreens();
 
@@ -8,8 +9,8 @@ Navigation.startSingleScreenApp({
     screen: 'my.HomeScreen',
     title: 'Rezepte',
     navigatorStyle: {
-      navBarBackgroundColor: '#ff560f',
-      navBarTextColor: '#ffffff',
+      navBarBackgroundColor: colors.primary,
+      navBarTextColor: colors.white,
     },
   },
 });
