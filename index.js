@@ -13,4 +13,10 @@ Navigation.startSingleScreenApp({
       navBarTextColor: colors.white,
     },
   },
+  drawer: {
+    left: {
+      screen: 'my.SideDrawer',
+      fixedWidth: 500,
+    },
+  },
 });

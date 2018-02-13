@@ -6,6 +6,7 @@ import Fuse from 'fuse.js';
 import RecipePreview from './components/RecipePreview/RecipePreview';
 import Searchbar from './components/Searchbar/Searchbar';
 import SearchIcon from './assets/icons/search_white.png';
+import colors from './config/colors';
 import styles from './styles';
 
 export default class App extends React.Component {
@@ -18,6 +19,11 @@ export default class App extends React.Component {
       id: 'search',
       icon: SearchIcon,
     }],
+  };
+
+  static navigatorStyle = {
+    navBarBackgroundColor: colors.primary,
+    navBarTextColor: colors.white,
   };
 
   constructor(props) {
