@@ -1,6 +1,7 @@
 import React from 'react';
 import { FlatList, Text, View } from 'react-native';
 import axios from 'axios';
+import Fuse from 'fuse.js';
 
 import RecipePreview from './components/RecipePreview/RecipePreview';
 import Searchbar from './components/Searchbar/Searchbar';
@@ -26,12 +27,25 @@ export default class App extends React.Component {
       searchActive: false,
       searchValue: '',
     };
+    this.fuse = null;
+    this.initialRecipes = null;
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
 
   async componentDidMount() {
     const res = await axios.get('https://georgs-recipes.herokuapp.com/api/recipes');
-    this.setState({ recipes: res.data });
+    const recipes = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    this.initialRecipes = recipes;
+    this.setState({ recipes });
+    this.fuse = new Fuse(recipes, {
+      shouldSort: true,
+      threshold: 0.33,
+      keys: [
+        'title',
+        'ingredients.name',
+      ],
+      minMatchCharLength: 2,
+    });
   }
 
   onNavigatorEvent = (event) => {
@@ -50,10 +64,13 @@ export default class App extends React.Component {
     const searchbar = this.state.searchActive ? (
       <Searchbar
         value={this.props.searchValue}
-        onChange={searchValue => this.setState({ searchValue })}
+        onChange={(searchValue) => {
+          const recipes = searchValue ? this.fuse.search(searchValue) : this.initialRecipes;
+          this.setState({ recipes, searchValue });
+        }}
         onClear={() => this.setState({ searchValue: '' })}
         onBack={() => {
-          this.setState({ searchActive: false });
+          this.setState({ searchActive: false, recipes: this.initialRecipes });
           this.props.navigator.setStyle({
             navBarHidden: false,
           });

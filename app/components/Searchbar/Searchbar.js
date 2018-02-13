@@ -27,6 +27,7 @@ export default class Searchbar extends Component {
           ref={(search) => { this.search = search; }}
           value={this.props.value}
           noIcon
+          clearIcon={{ color: colors.white, name: 'close' }}
           placeholder="Suchen..."
           containerStyle={styles.searchContainer}
           inputStyle={styles.searchInput}
