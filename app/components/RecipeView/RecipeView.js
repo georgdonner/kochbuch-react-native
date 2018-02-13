@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Image, Text, ScrollView, View } from 'react-native';
 import { Icon } from 'react-native-elements';
+import Markdown from 'react-native-simple-markdown';
 
 import BottomGradient from '../BottomGradient/BottomGradient';
 import colors from '../../config/colors';
@@ -15,10 +16,19 @@ export default class RecipeView extends Component {
   }
 
   render() {
-    const categories = this.props.recipe.categories
-      .map(cat => (
-        <View key={cat}><Text style={styles.category}># {cat.toUpperCase()}</Text></View>
-      ));
+    const categories = this.props.recipe.categories.map(cat => (
+      <View key={cat}><Text style={styles.category}># {cat.toUpperCase()}</Text></View>
+    ));
+    const ingredients = this.props.recipe.ingredients.map((ingr) => {
+      let { name } = ingr;
+      if (ingr.hint) name += ` (${ingr.hint})`;
+      return (
+        <View key={ingr.name} style={styles.ingredient}>
+          <Text style={styles.ingredientText}>{name}</Text>
+          <Icon raised name="add-shopping-cart" color={colors.darkGray} size={20} />
+        </View>
+      );
+    });
     return (
       <ScrollView>
         <View style={styles.image}>
@@ -50,6 +60,20 @@ export default class RecipeView extends Component {
             onPress={() => this.setState({ servings: this.state.servings + 1 })}
           />
         </View>
+        <View style={styles.divider} />
+        <Text style={styles.title}>Zutaten</Text>
+        {ingredients}
+        <Text style={styles.title}>Beschreibung</Text>
+        <Markdown
+          style={styles.description}
+          styles={{
+            paragraph: styles.descriptionParagraph,
+            text: styles.descriptionText,
+            view: styles.description,
+          }}
+        >
+          {this.props.recipe.description}
+        </Markdown>
       </ScrollView>
     );
   }

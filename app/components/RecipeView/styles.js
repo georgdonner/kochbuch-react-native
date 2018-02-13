@@ -58,4 +58,40 @@ export default StyleSheet.create({
     textAlign: 'center',
     color: colors.gray1,
   },
+  divider: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#e9e9e9',
+    paddingTop: 10,
+    marginHorizontal: 30,
+  },
+  ingredient: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginRight: 5,
+    marginLeft: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e9e9e9',
+  },
+  ingredientText: {
+    fontFamily: 'sans-serif-condensed',
+    fontSize: 19,
+    color: colors.gray1,
+  },
+  description: {
+    paddingHorizontal: 15,
+    paddingBottom: 20,
+  },
+  descriptionText: {
+    color: colors.darkGray,
+    fontSize: 18,
+    fontFamily: 'sans-serif-light',
+  },
+  descriptionParagraph: {
+    paddingBottom: 6,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+  },
 });
