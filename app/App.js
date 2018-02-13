@@ -82,7 +82,9 @@ export default class App extends React.Component {
         {searchbar}
         <FlatList
           data={this.state.recipes}
-          renderItem={({ item }) => <RecipePreview recipe={item} />}
+          renderItem={
+            ({ item }) => <RecipePreview recipe={item} navigator={this.props.navigator} />
+          }
           keyExtractor={item => item._id}
           removeClippedSubviews
         />

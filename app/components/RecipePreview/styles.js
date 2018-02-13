@@ -9,12 +9,6 @@ export default StyleSheet.create({
     height: 200,
     width: '100%',
   },
-  gradient: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    height: 30,
-  },
   info: {
     position: 'absolute',
     bottom: 0,

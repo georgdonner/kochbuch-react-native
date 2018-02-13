@@ -1,7 +1,8 @@
 import React from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
+import BottomGradient from '../BottomGradient/BottomGradient';
 import styles from './styles';
 
 export default (props) => {
@@ -15,24 +16,27 @@ export default (props) => {
   else if (props.recipe.categories.includes('Vegetarisch')) info = 'vegetarisch';
   return (
     <View style={styles.recipe}>
-      <View style={styles.image}>
-        <Image
-          source={{
-            uri: props.recipe.heroImage ? props.recipe.heroImage.replace('w:2000', 'w:600') :
-            'http://timgratton.com/wp-content/uploads/2018/01/placeholder-600x400.png',
-          }}
-          style={styles.image}
-        />
-        <LinearGradient
-          colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.75)']}
-          style={styles.gradient}
-        />
-        <View style={styles.info}>
-          <Text style={styles.infoText}>{info}</Text>
+      <TouchableOpacity
+        onPress={() => {
+          props.navigator.push({ screen: 'my.Recipe', title: props.recipe.title, passProps: { recipe: props.recipe } });
+        }}
+      >
+        <View style={styles.image}>
+          <Image
+            source={{
+              uri: props.recipe.heroImage ? props.recipe.heroImage.replace('w:2000', 'w:600') :
+              'http://timgratton.com/wp-content/uploads/2018/01/placeholder-600x400.png',
+            }}
+            style={styles.image}
+          />
+          <BottomGradient />
+          <View style={styles.info}>
+            <Text style={styles.infoText}>{info}</Text>
+          </View>
         </View>
-      </View>
-      <Text style={styles.title}>{props.recipe.title}</Text>
-      <View style={styles.categories}>{categories}</View>
+        <Text style={styles.title}>{props.recipe.title}</Text>
+        <View style={styles.categories}>{categories}</View>
+      </TouchableOpacity>
     </View>
   );
 };
