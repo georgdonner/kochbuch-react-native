@@ -1,3 +1,15 @@
-import { AppRegistry } from 'react-native';
-import App from './App';
-AppRegistry.registerComponent('kochbuch', () => App);
+import { Navigation } from 'react-native-navigation';
+import registerScreens from './screens';
+
+registerScreens();
+
+Navigation.startSingleScreenApp({
+  screen: {
+    screen: 'my.HomeScreen',
+    title: 'Rezepte',
+    navigatorStyle: {
+      navBarBackgroundColor: '#ff560f',
+      navBarTextColor: '#ffffff',
+    },
+  },
+});
