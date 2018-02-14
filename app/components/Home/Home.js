@@ -41,10 +41,17 @@ class Home extends Component {
   }
 
   async componentDidMount() {
-    let { recipes, settings } = this.props;
+    let { recipes, settings, shoppingList } = this.props;
     if (!settings) {
       settings = await getSettings();
       this.props.updateSettings(settings);
+    }
+    if (!shoppingList) {
+      axios.get(`https://georgs-recipes.herokuapp.com/api/list/${settings.shoppingList}`)
+        .then((res) => {
+          shoppingList = res.data.list;
+          this.props.updateShoppingList(shoppingList);
+        });
     }
     if (!recipes) {
       const res = await axios.get('https://georgs-recipes.herokuapp.com/api/recipes');
@@ -111,11 +118,13 @@ class Home extends Component {
 const mapStateToProps = state => ({
   recipes: state.recipes,
   settings: state.settings,
+  shoppingList: state.user.shoppingList,
 });
 
 const mapDispatchToProps = dispatch => ({
   updateRecipes: recipes => dispatch(actions.updateRecipes(recipes)),
   updateSettings: settings => dispatch(actions.updateSettings(settings)),
+  updateShoppingList: list => dispatch(actions.updateShoppingList(list)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

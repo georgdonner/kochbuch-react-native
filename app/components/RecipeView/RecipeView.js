@@ -1,19 +1,31 @@
 import React, { Component } from 'react';
-import { Image, Text, ScrollView, View } from 'react-native';
+import { Image, ScrollView, Text, ToastAndroid, View } from 'react-native';
+import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 import Markdown from 'react-native-simple-markdown';
+import axios from 'axios';
 
 import BottomGradient from '../common/BottomGradient/BottomGradient';
 import calcServings from '../../utils/calcServings';
+import * as actions from '../../actions';
 import colors from '../../config/colors';
 import styles from './styles';
 
-export default class RecipeView extends Component {
+class RecipeView extends Component {
   constructor(props) {
     super(props);
     this.state = {
       servings: props.recipe.servings,
     };
+  }
+
+  addToShoppingList = async (item) => {
+    const list = this.props.shoppingList.concat([item]);
+    await axios.put(`https://georgs-recipes.herokuapp.com/api/list/${this.props.listCode}`, {
+      list,
+    });
+    this.props.updateShoppingList(list);
+    ToastAndroid.show('Zutat hinzugefügt', ToastAndroid.SHORT);
   }
 
   render() {
@@ -27,7 +39,13 @@ export default class RecipeView extends Component {
       return (
         <View key={ingr.name} style={styles.ingredient}>
           <Text style={styles.ingredientText}>{converted}</Text>
-          <Icon raised name="add-shopping-cart" color={colors.darkGray} size={20} />
+          <Icon
+            raised
+            name="add-shopping-cart"
+            color={colors.darkGray}
+            size={20}
+            onPress={() => this.addToShoppingList(converted)}
+          />
         </View>
       );
     });
@@ -80,3 +98,14 @@ export default class RecipeView extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  listCode: state.settings.shoppingList,
+  shoppingList: state.user.shoppingList,
+});
+
+const mapDispatchToProps = dispatch => ({
+  updateShoppingList: list => dispatch(actions.updateShoppingList(list)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RecipeView);

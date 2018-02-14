@@ -25,7 +25,6 @@ class ShoppingList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      shoppingList: [],
       newItem: '',
     };
   }
@@ -33,18 +32,17 @@ class ShoppingList extends Component {
   async componentDidMount() {
     const res = await axios.get(`https://georgs-recipes.herokuapp.com/api/list/${this.props.listCode}`);
     const shoppingList = res.data.list;
-    this.setState({ shoppingList });
     this.props.updateShoppingList(shoppingList);
   }
 
   async addItem() {
     try {
-      const list = this.state.shoppingList.concat([this.state.newItem]);
+      const list = this.props.shoppingList.concat([this.state.newItem]);
       this.setState({ newItem: '' });
       await axios.put(`https://georgs-recipes.herokuapp.com/api/list/${this.props.listCode}`, {
         list,
       });
-      this.setState({ shoppingList: list });
+      this.props.updateShoppingList(list);
     } catch (error) {
       console.error(error);
     }
@@ -52,19 +50,20 @@ class ShoppingList extends Component {
 
   async removeItem(index) {
     try {
-      const list = this.state.shoppingList.slice();
+      const list = this.props.shoppingList.slice();
       list.splice(index, 1);
       await axios.put(`https://georgs-recipes.herokuapp.com/api/list/${this.props.listCode}`, {
         list,
       });
-      this.setState({ shoppingList: list });
+      this.props.updateShoppingList(list);
     } catch (error) {
       console.error(error);
     }
   }
 
   render() {
-    const list = this.state.shoppingList.map((item, index) => (
+    if (!this.props.shoppingList) return null;
+    const list = this.props.shoppingList.map((item, index) => (
       <CheckBox
         key={item} title={item}
         textStyle={styles.text}
