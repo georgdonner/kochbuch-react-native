@@ -11,6 +11,13 @@ export default StyleSheet.create({
     color: colors.darkGray,
     fontWeight: 'normal',
     paddingLeft: 5,
+    paddingVertical: 0,
+  },
+  checkbox: {
+    borderWidth: 0,
+    padding: 2,
+    margin: 5,
+    marginLeft: 20,
   },
   input: {
     fontSize: 18,

@@ -67,6 +67,7 @@ class ShoppingList extends Component {
       <CheckBox
         key={item} title={item}
         textStyle={styles.text}
+        containerStyle={styles.checkbox}
         onIconPress={() => this.removeItem(index)}
       />
     ));
