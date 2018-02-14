@@ -1,1 +1,2 @@
 export const UPDATE_RECIPES = 'UPDATE_RECIPES';
+export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';

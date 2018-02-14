@@ -26,9 +26,16 @@ export default props => (
       <Icon reverse name="date-range" color={colors.primary} />
       <Text style={styles.drawerText}>Wochenplan</Text>
     </View>
-    <View style={styles.drawerItem}>
-      <Icon reverse name="settings" color={colors.primary} />
-      <Text style={styles.drawerText}>Einstellungen</Text>
-    </View>
+    <TouchableOpacity
+      onPress={() => {
+        props.navigator.toggleDrawer({ side: 'left' });
+        props.navigator.push({ screen: 'my.Settings', title: 'Einstellungen' });
+      }}
+    >
+      <View style={styles.drawerItem}>
+        <Icon reverse name="settings" color={colors.primary} />
+        <Text style={styles.drawerText}>Einstellungen</Text>
+      </View>
+    </TouchableOpacity>
   </View>
 );

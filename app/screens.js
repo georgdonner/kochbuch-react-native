@@ -1,11 +1,13 @@
 import { Navigation } from 'react-native-navigation';
 
-import Home from './components/Home/Home';
 import SideDrawer from './components/SideDrawer/SideDrawer';
+import Home from './components/Home/Home';
 import RecipeView from './components/RecipeView/RecipeView';
+import Settings from './components/Settings/Settings';
 
 export default (store, Provider) => {
   Navigation.registerComponent('my.SideDrawer', () => SideDrawer, store, Provider);
   Navigation.registerComponent('my.HomeScreen', () => Home, store, Provider);
   Navigation.registerComponent('my.Recipe', () => RecipeView, store, Provider);
+  Navigation.registerComponent('my.Settings', () => Settings, store, Provider);
 };

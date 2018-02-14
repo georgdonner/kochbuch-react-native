@@ -7,6 +7,7 @@ import Fuse from 'fuse.js';
 import RecipePreview from './RecipePreview/RecipePreview';
 import Searchbar from './Searchbar/Searchbar';
 import SearchIcon from '../../assets/icons/search_white.png';
+import { getSettings } from '../../storage/settings';
 import * as actions from '../../actions';
 import colors from '../../config/colors';
 import styles from './styles';
@@ -40,7 +41,11 @@ class Home extends Component {
   }
 
   async componentDidMount() {
-    let { recipes } = this.props;
+    let { recipes, settings } = this.props;
+    if (!settings) {
+      settings = await getSettings();
+      this.props.updateSettings(settings);
+    }
     if (!recipes) {
       const res = await axios.get('https://georgs-recipes.herokuapp.com/api/recipes');
       recipes = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -105,10 +110,12 @@ class Home extends Component {
 
 const mapStateToProps = state => ({
   recipes: state.recipes,
+  settings: state.settings,
 });
 
 const mapDispatchToProps = dispatch => ({
   updateRecipes: recipes => dispatch(actions.updateRecipes(recipes)),
+  updateSettings: settings => dispatch(actions.updateSettings(settings)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
