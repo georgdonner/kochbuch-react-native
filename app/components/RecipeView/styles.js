@@ -77,6 +77,7 @@ export default StyleSheet.create({
     fontFamily: 'sans-serif-condensed',
     fontSize: 19,
     color: colors.gray1,
+    maxWidth: '75%',
   },
   description: {
     paddingHorizontal: 15,

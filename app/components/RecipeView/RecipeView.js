@@ -4,6 +4,7 @@ import { Icon } from 'react-native-elements';
 import Markdown from 'react-native-simple-markdown';
 
 import BottomGradient from '../BottomGradient/BottomGradient';
+import calcServings from '../../utils/calcServings';
 import colors from '../../config/colors';
 import styles from './styles';
 
@@ -20,11 +21,12 @@ export default class RecipeView extends Component {
       <View key={cat}><Text style={styles.category}># {cat.toUpperCase()}</Text></View>
     ));
     const ingredients = this.props.recipe.ingredients.map((ingr) => {
-      let { name } = ingr;
-      if (ingr.hint) name += ` (${ingr.hint})`;
+      const { hint } = ingr;
+      let converted = calcServings(ingr, this.props.recipe.servings, this.state.servings);
+      if (hint) converted += ` (${ingr.hint})`;
       return (
         <View key={ingr.name} style={styles.ingredient}>
-          <Text style={styles.ingredientText}>{name}</Text>
+          <Text style={styles.ingredientText}>{converted}</Text>
           <Icon raised name="add-shopping-cart" color={colors.darkGray} size={20} />
         </View>
       );
