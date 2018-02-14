@@ -18,10 +18,17 @@ export default props => (
         <Text style={styles.drawerText}>Rezepte</Text>
       </View>
     </TouchableOpacity>
-    <View style={styles.drawerItem}>
-      <Icon reverse name="shopping-cart" color={colors.primary} />
-      <Text style={styles.drawerText}>Einkaufsliste</Text>
-    </View>
+    <TouchableOpacity
+      onPress={() => {
+        props.navigator.toggleDrawer({ side: 'left' });
+        props.navigator.resetTo({ screen: 'my.ShoppingList', title: 'Einkaufsliste' });
+      }}
+    >
+      <View style={styles.drawerItem}>
+        <Icon reverse name="shopping-cart" color={colors.primary} />
+        <Text style={styles.drawerText}>Einkaufsliste</Text>
+      </View>
+    </TouchableOpacity>
     <View style={styles.drawerItem}>
       <Icon reverse name="date-range" color={colors.primary} />
       <Text style={styles.drawerText}>Wochenplan</Text>
