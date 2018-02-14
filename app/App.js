@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { FlatList, Text, View } from 'react-native';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import Fuse from 'fuse.js';
 
 import RecipePreview from './components/RecipePreview/RecipePreview';
 import Searchbar from './components/Searchbar/Searchbar';
 import SearchIcon from './assets/icons/search_white.png';
+import * as actions from './actions';
 import colors from './config/colors';
 import styles from './styles';
 
-export default class App extends React.Component {
+class App extends Component {
   static navigatorButtons = {
     leftButtons: [{
       id: 'sideMenu',
@@ -34,15 +36,14 @@ export default class App extends React.Component {
       searchValue: '',
     };
     this.fuse = null;
-    this.initialRecipes = null;
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
 
   async componentDidMount() {
     const res = await axios.get('https://georgs-recipes.herokuapp.com/api/recipes');
     const recipes = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    this.initialRecipes = recipes;
     this.setState({ recipes });
+    this.props.updateRecipes(recipes);
     this.fuse = new Fuse(recipes, {
       shouldSort: true,
       threshold: 0.33,
@@ -69,14 +70,14 @@ export default class App extends React.Component {
     if (!this.state.recipes) return <Text>Lädt...</Text>;
     const searchbar = this.state.searchActive ? (
       <Searchbar
-        value={this.props.searchValue}
+        value={this.state.searchValue}
         onChange={(searchValue) => {
-          const recipes = searchValue ? this.fuse.search(searchValue) : this.initialRecipes;
+          const recipes = searchValue ? this.fuse.search(searchValue) : this.props.recipes;
           this.setState({ recipes, searchValue });
         }}
         onClear={() => this.setState({ searchValue: '' })}
         onBack={() => {
-          this.setState({ searchActive: false, recipes: this.initialRecipes });
+          this.setState({ searchActive: false, recipes: this.props.recipes });
           this.props.navigator.setStyle({
             navBarHidden: false,
           });
@@ -98,3 +99,13 @@ export default class App extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  recipes: state.recipes,
+});
+
+const mapDispatchToProps = dispatch => ({
+  updateRecipes: recipes => dispatch(actions.updateRecipes(recipes)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

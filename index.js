@@ -1,8 +1,14 @@
 import { Navigation } from 'react-native-navigation';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+
 import registerScreens from './app/screens';
 import colors from './app/config/colors';
+import reducer from './app/reducers';
 
-registerScreens();
+const store = createStore(reducer);
+
+registerScreens(store, Provider);
 
 Navigation.startSingleScreenApp({
   screen: {
