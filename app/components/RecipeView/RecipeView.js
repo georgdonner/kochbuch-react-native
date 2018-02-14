@@ -3,7 +3,7 @@ import { Image, Text, ScrollView, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import Markdown from 'react-native-simple-markdown';
 
-import BottomGradient from '../BottomGradient/BottomGradient';
+import BottomGradient from '../common/BottomGradient/BottomGradient';
 import calcServings from '../../utils/calcServings';
 import colors from '../../config/colors';
 import styles from './styles';

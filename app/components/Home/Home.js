@@ -4,14 +4,14 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import Fuse from 'fuse.js';
 
-import RecipePreview from './components/RecipePreview/RecipePreview';
-import Searchbar from './components/Searchbar/Searchbar';
-import SearchIcon from './assets/icons/search_white.png';
-import * as actions from './actions';
-import colors from './config/colors';
+import RecipePreview from './RecipePreview/RecipePreview';
+import Searchbar from './Searchbar/Searchbar';
+import SearchIcon from '../../assets/icons/search_white.png';
+import * as actions from '../../actions';
+import colors from '../../config/colors';
 import styles from './styles';
 
-class App extends Component {
+class Home extends Component {
   static navigatorButtons = {
     leftButtons: [{
       id: 'sideMenu',
@@ -40,10 +40,13 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    const res = await axios.get('https://georgs-recipes.herokuapp.com/api/recipes');
-    const recipes = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    let { recipes } = this.props;
+    if (!recipes) {
+      const res = await axios.get('https://georgs-recipes.herokuapp.com/api/recipes');
+      recipes = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      this.props.updateRecipes(recipes);
+    }
     this.setState({ recipes });
-    this.props.updateRecipes(recipes);
     this.fuse = new Fuse(recipes, {
       shouldSort: true,
       threshold: 0.33,
@@ -108,4 +111,4 @@ const mapDispatchToProps = dispatch => ({
   updateRecipes: recipes => dispatch(actions.updateRecipes(recipes)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

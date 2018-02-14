@@ -22,5 +22,13 @@ export default props => (
       <Icon reverse name="shopping-cart" color={colors.primary} />
       <Text style={styles.drawerText}>Einkaufsliste</Text>
     </View>
+    <View style={styles.drawerItem}>
+      <Icon reverse name="date-range" color={colors.primary} />
+      <Text style={styles.drawerText}>Wochenplan</Text>
+    </View>
+    <View style={styles.drawerItem}>
+      <Icon reverse name="settings" color={colors.primary} />
+      <Text style={styles.drawerText}>Einstellungen</Text>
+    </View>
   </View>
 );

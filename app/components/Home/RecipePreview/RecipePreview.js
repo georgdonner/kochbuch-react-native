@@ -1,8 +1,7 @@
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 
-import BottomGradient from '../BottomGradient/BottomGradient';
+import BottomGradient from '../../common/BottomGradient/BottomGradient';
 import styles from './styles';
 
 export default (props) => {

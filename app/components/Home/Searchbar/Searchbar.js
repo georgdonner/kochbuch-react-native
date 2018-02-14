@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Icon, SearchBar } from 'react-native-elements';
-import colors from '../../config/colors';
+import colors from '../../../config/colors';
 import styles from './styles';
 
 export default class Searchbar extends Component {
