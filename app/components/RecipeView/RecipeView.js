@@ -9,15 +9,37 @@ import BottomGradient from '../common/BottomGradient/BottomGradient';
 import Servings from '../common/Servings/Servings';
 import calcServings from '../../utils/calcServings';
 import * as actions from '../../actions';
+import CalendarIcon from '../../assets/icons/calendar_black.png';
 import colors from '../../config/colors';
 import styles from './styles';
 
 class RecipeView extends Component {
+  static navigatorButtons = {
+    rightButtons: [{
+      id: 'weekplan',
+      icon: CalendarIcon,
+    }],
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       servings: props.servings || props.recipe.servings,
     };
+    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+  }
+
+  onNavigatorEvent = (event) => {
+    if (event.type === 'NavBarButtonPress') {
+      if (event.id === 'weekplan') {
+        const { title, _id } = this.props.recipe;
+        this.props.navigator.push({
+          screen: 'my.WeekplanForm',
+          title: 'Neuer Eintrag',
+          passProps: { entry: { recipe: { id: _id, title } } },
+        });
+      }
+    }
   }
 
   addToShoppingList = async (item) => {

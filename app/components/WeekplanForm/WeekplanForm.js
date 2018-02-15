@@ -23,7 +23,7 @@ class WeekplanForm extends Component {
       recipe: null,
       ...props.entry,
     };
-    if (props.entry) this.state.date = new Date(props.entry.date);
+    if (props.entry && props.entry.date) this.state.date = new Date(props.entry.date);
     this.fuse = null;
   }
 
@@ -85,7 +85,7 @@ class WeekplanForm extends Component {
 
   saveEntry = async () => {
     let plan = this.props.weekplan;
-    if (this.props.entry) {
+    if (this.props.entry._id) {
       plan = this.props.weekplan.map((entry) => {
         if (entry._id === this.props.entry._id) {
           const updated = {
