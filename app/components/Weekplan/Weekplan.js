@@ -58,6 +58,22 @@ class Weekplan extends Component {
     this.props.weekplan.filter(entry => moment(entry.date).isSame(moment(date), 'day'))
   )
 
+  goToRecipe = (entry) => {
+    if (entry.recipe) {
+      const recipe = this.props.recipes.find(r => r._id === entry.recipe.id);
+      if (recipe) {
+        this.props.navigator.push({
+          screen: 'my.Recipe',
+          title: recipe.title,
+          passProps: {
+            recipe,
+            servings: entry.servings,
+          },
+        });
+      }
+    }
+  }
+
   weekText = () => {
     const weekOfYear = moment().add(this.state.week, 'w').isoWeek();
     return this.state.week === 0 ? 'Diese Woche' : `Woche ${weekOfYear}`;
@@ -66,7 +82,11 @@ class Weekplan extends Component {
   render() {
     if (!this.props.weekplan) return <Text>Keinen Wochenplan gefunden :(</Text>;
     const week = this.getWeek(this.state.week).map(day => (
-      <Weekday key={day.date} week={this.state.week} day={day} />
+      <Weekday
+        key={day.date}
+        week={this.state.week} day={day}
+        onPressEntry={entry => this.goToRecipe(entry)}
+      />
     ));
     return (
       <View>
@@ -92,6 +112,7 @@ class Weekplan extends Component {
 const mapStateToProps = state => ({
   planCode: state.settings.weekplan,
   weekplan: state.user.weekplan,
+  recipes: state.recipes,
 });
 
 const mapDispatchToProps = dispatch => ({

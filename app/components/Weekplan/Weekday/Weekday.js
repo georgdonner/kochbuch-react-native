@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import moment from 'moment';
 
 import weekday from '../../../utils/weekday';
@@ -12,10 +12,12 @@ export default (props) => {
   }
   const recipes = props.day.entries.map(entry => (
     <View key={entry._id}>
-      <Text style={styles.meta}>
-        {`${entry.time} | ${entry.servings} ${entry.servings > 1 ? 'PERSONEN' : 'PERSON'}`}
-      </Text>
-      <Text style={styles.title}>{entry.custom || entry.recipe.title}</Text>
+      <TouchableOpacity onPress={() => props.onPressEntry(entry)}>
+        <Text style={styles.meta}>
+          {`${entry.time} | ${entry.servings} ${entry.servings > 1 ? 'PERSONEN' : 'PERSON'}`}
+        </Text>
+        <Text style={styles.title}>{entry.custom || entry.recipe.title}</Text>
+      </TouchableOpacity>
     </View>
   ));
 

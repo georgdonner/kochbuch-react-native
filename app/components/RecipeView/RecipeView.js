@@ -15,7 +15,7 @@ class RecipeView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      servings: props.recipe.servings,
+      servings: props.servings || props.recipe.servings,
     };
   }
 
