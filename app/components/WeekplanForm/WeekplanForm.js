@@ -27,7 +27,11 @@ class WeekplanForm extends Component {
     this.fuse = null;
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    if (!this.props.weekplan) {
+      const res = await axios.get(`https://georgs-recipes.herokuapp.com/api/plan/${this.props.planCode}`);
+      this.props.updateWeekplan(res.data.plan);
+    }
     this.fuse = new Fuse(this.props.recipes, {
       shouldSort: true,
       threshold: 0.33,
@@ -118,6 +122,9 @@ class WeekplanForm extends Component {
   }
 
   render() {
+    if (!this.props.recipes || !this.props.weekplan) {
+      return <Text>Lädt...</Text>;
+    }
     const searchResults = !this.state.recipe && this.state.recipeInput.length > 2 ?
       this.fuse.search(this.state.recipeInput) : null;
     const recipes = searchResults ? (
