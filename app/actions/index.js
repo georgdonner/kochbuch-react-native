@@ -1,3 +1,3 @@
 export { updateRecipes } from './recipes';
 export { updateSettings } from './settings';
-export { updateShoppingList } from './user';
+export { updateShoppingList, updateWeekplan } from './user';

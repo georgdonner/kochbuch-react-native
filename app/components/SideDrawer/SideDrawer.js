@@ -29,10 +29,17 @@ export default props => (
         <Text style={styles.drawerText}>Einkaufsliste</Text>
       </View>
     </TouchableOpacity>
-    <View style={styles.drawerItem}>
-      <Icon reverse name="date-range" color={colors.primary} />
-      <Text style={styles.drawerText}>Wochenplan</Text>
-    </View>
+    <TouchableOpacity
+      onPress={() => {
+        props.navigator.toggleDrawer({ side: 'left' });
+        props.navigator.resetTo({ screen: 'my.Weekplan', title: 'Wochenplan' });
+      }}
+    >
+      <View style={styles.drawerItem}>
+        <Icon reverse name="date-range" color={colors.primary} />
+        <Text style={styles.drawerText}>Wochenplan</Text>
+      </View>
+    </TouchableOpacity>
     <TouchableOpacity
       onPress={() => {
         props.navigator.toggleDrawer({ side: 'left' });
