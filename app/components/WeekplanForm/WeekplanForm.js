@@ -108,10 +108,10 @@ class WeekplanForm extends Component {
       if (this.state.recipe) entry.recipe = this.state.recipe;
       plan = this.props.weekplan.concat([entry]);
     }
-    await axios.put(`https://georgs-recipes.herokuapp.com/api/plan/${this.props.planCode}`, {
+    const res = await axios.put(`https://georgs-recipes.herokuapp.com/api/plan/${this.props.planCode}`, {
       plan,
     });
-    this.props.updateWeekplan(plan);
+    this.props.updateWeekplan(res.data.plan);
     this.props.navigator.pop();
   }
 

@@ -35,7 +35,10 @@ export default class Weekday extends Component {
           >
             <Text style={styles.optionText}>Bearbeiten</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.option} onPress={() => this.props.onDeleteEntry(entry._id)}>
+          <TouchableOpacity
+            style={styles.option}
+            onPress={() => this.props.onDeleteEntry(entry._id)}
+          >
             <Text style={styles.optionText}>Löschen</Text>
           </TouchableOpacity>
         </View>
