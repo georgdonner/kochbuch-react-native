@@ -9,6 +9,7 @@
 # android
 .gradle
 build
+*.keystore
 
 # misc
 .env.local
