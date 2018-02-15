@@ -1,12 +1,12 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import colors from '../../config/colors';
 import styles from './styles';
 
 export default props => (
-  <View style={styles.container}>
+  <ScrollView contentContainerStyle={styles.container}>
     <TouchableOpacity
       onPress={() => {
         props.navigator.toggleDrawer({ side: 'left' });
@@ -51,5 +51,5 @@ export default props => (
         <Text style={styles.drawerText}>Einstellungen</Text>
       </View>
     </TouchableOpacity>
-  </View>
+  </ScrollView>
 );
