@@ -15,12 +15,12 @@ class WeekplanForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: new Date(),
-      time: '19:30',
-      servings: 2,
-      custom: '',
+      date: new Date(props.entry.date || Date.now()),
+      time: props.entry.time || '19:30',
+      servings: props.entry.servings || 2,
+      custom: props.entry.custom || '',
       recipeInput: '',
-      recipe: null,
+      recipe: props.entry.recipe,
     };
     this.fuse = null;
   }

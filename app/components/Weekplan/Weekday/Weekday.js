@@ -31,7 +31,10 @@ export default class Weekday extends Component {
           />
           <TouchableOpacity
             style={[styles.option, styles.center]}
-            onPress={() => {}}
+            onPress={() => {
+              this.setState({ editEntry: null });
+              this.props.onEditEntry(entry);
+            }}
           >
             <Text style={styles.optionText}>Bearbeiten</Text>
           </TouchableOpacity>

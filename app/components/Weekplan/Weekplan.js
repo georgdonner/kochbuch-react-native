@@ -87,6 +87,14 @@ class Weekplan extends Component {
     }
   }
 
+  editEntry = (entry) => {
+    this.props.navigator.push({
+      screen: 'my.WeekplanForm',
+      title: 'Eintrag bearbeiten',
+      passProps: { entry },
+    });
+  }
+
   deleteEntry = async (id) => {
     const plan = this.props.weekplan.filter(e => e._id !== id);
     await axios.put(`https://georgs-recipes.herokuapp.com/api/plan/${this.props.planCode}`, {
@@ -108,6 +116,7 @@ class Weekplan extends Component {
         key={day.date}
         week={this.state.week} day={day}
         onPressEntry={entry => this.goToRecipe(entry)}
+        onEditEntry={entry => this.editEntry(entry)}
         onDeleteEntry={id => this.deleteEntry(id)}
       />
     ));
