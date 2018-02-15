@@ -1,7 +1,7 @@
 import { UPDATE_SHOPPING_LIST, UPDATE_WEEKPLAN } from '../actions/actionTypes';
 
 const initialState = {
-  shoppingList: null,
+  shoppingList: [],
   weekplan: null,
 };
 
