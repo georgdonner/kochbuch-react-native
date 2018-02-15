@@ -7,6 +7,7 @@ import moment from 'moment';
 import 'moment/locale/de';
 
 import Weekday from './Weekday/Weekday';
+import AddIcon from '../../assets/icons/add_white.png';
 import * as actions from '../../actions';
 import colors from '../../config/colors';
 import styles from './styles';
@@ -18,6 +19,10 @@ class Weekplan extends Component {
     leftButtons: [{
       id: 'sideMenu',
       buttonColor: colors.white,
+    }],
+    rightButtons: [{
+      id: 'new',
+      icon: AddIcon,
     }],
   };
 
@@ -32,6 +37,7 @@ class Weekplan extends Component {
     this.state = {
       week: 0,
     };
+    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
 
   async componentDidMount() {
@@ -40,12 +46,19 @@ class Weekplan extends Component {
     this.props.updateWeekplan(weekplan);
   }
 
+  onNavigatorEvent = (event) => {
+    if (event.type === 'NavBarButtonPress') {
+      if (event.id === 'new') {
+        this.props.navigator.push({ screen: 'my.WeekplanForm', title: 'Neuer Eintrag' });
+      }
+    }
+  }
+
   getWeek = (offset = 0) => {
     const start = moment().startOf('isoWeek').add(offset, 'w');
     const week = [];
     for (let i = 0; i < 7; i += 1) {
       const date = moment(start).add(i, 'd').hours(12);
-      console.log(this.getEntries(date));
       week.push({
         date,
         entries: this.getEntries(date),

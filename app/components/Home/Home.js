@@ -65,6 +65,7 @@ class Home extends Component {
       keys: [
         'title',
         'ingredients.name',
+        'categories',
       ],
       minMatchCharLength: 2,
     });

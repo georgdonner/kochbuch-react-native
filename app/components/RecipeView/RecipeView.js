@@ -6,6 +6,7 @@ import Markdown from 'react-native-simple-markdown';
 import axios from 'axios';
 
 import BottomGradient from '../common/BottomGradient/BottomGradient';
+import Servings from '../common/Servings/Servings';
 import calcServings from '../../utils/calcServings';
 import * as actions from '../../actions';
 import colors from '../../config/colors';
@@ -64,22 +65,11 @@ class RecipeView extends Component {
         </View>
         <Text style={styles.title}>{this.props.recipe.title}</Text>
         <View style={styles.categories}>{categories}</View>
-        <View style={styles.servingsContainer}>
-          <Icon
-            raised reverse
-            name="remove" color={colors.primary}
-            onPress={() => this.setState({ servings: this.state.servings - 1 || 1 })}
-          />
-          <View style={styles.servings}>
-            <Text style={styles.number}>{this.state.servings}</Text>
-            <Text style={styles.label}>{this.state.servings > 1 ? 'Portionen' : 'Portion'}</Text>
-          </View>
-          <Icon
-            raised reverse
-            name="add" color={colors.primary}
-            onPress={() => this.setState({ servings: this.state.servings + 1 })}
-          />
-        </View>
+        <Servings
+          servings={this.state.servings}
+          onDecrement={() => this.setState({ servings: this.state.servings - 1 || 1 })}
+          onIncrement={() => this.setState({ servings: this.state.servings + 1 })}
+        />
         <View style={styles.divider} />
         <Text style={styles.title}>Zutaten</Text>
         {ingredients}

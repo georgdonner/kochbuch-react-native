@@ -35,29 +35,6 @@ export default StyleSheet.create({
     color: colors.darkGray,
     padding: 5,
   },
-  servingsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingHorizontal: 50,
-    paddingVertical: 10,
-  },
-  servings: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
-  number: {
-    fontFamily: 'sans-serif-condensed',
-    fontSize: 60,
-    textAlign: 'center',
-    color: colors.darkGray,
-  },
-  label: {
-    fontFamily: 'sans-serif-condensed',
-    fontSize: 22,
-    textAlign: 'center',
-    color: colors.gray1,
-  },
   divider: {
     borderBottomWidth: 1,
     borderBottomColor: colors.lightBorder,
