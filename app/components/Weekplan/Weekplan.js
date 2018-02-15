@@ -6,7 +6,7 @@ import axios from 'axios';
 import moment from 'moment';
 import 'moment/locale/de';
 
-import weekday from '../../utils/weekday';
+import Weekday from './Weekday/Weekday';
 import * as actions from '../../actions';
 import colors from '../../config/colors';
 import styles from './styles';
@@ -45,6 +45,7 @@ class Weekplan extends Component {
     const week = [];
     for (let i = 0; i < 7; i += 1) {
       const date = moment(start).add(i, 'd').hours(12);
+      console.log(this.getEntries(date));
       week.push({
         date,
         entries: this.getEntries(date),
@@ -62,20 +63,10 @@ class Weekplan extends Component {
     return this.state.week === 0 ? 'Diese Woche' : `Woche ${weekOfYear}`;
   }
 
-  weekdayText = (date) => {
-    let text = weekday(date).toUpperCase();
-    if (this.state.week !== 0) {
-      text += ` (${moment(date).format('DD.MM.YY')})`;
-    }
-    return text;
-  }
-
   render() {
     if (!this.props.weekplan) return <Text>Keinen Wochenplan gefunden :(</Text>;
     const week = this.getWeek(this.state.week).map(day => (
-      <View key={day.date} style={styles.entry}>
-        <Text style={styles.weekday}>{this.weekdayText(day.date)}</Text>
-      </View>
+      <Weekday key={day.date} week={this.state.week} day={day} />
     ));
     return (
       <View>

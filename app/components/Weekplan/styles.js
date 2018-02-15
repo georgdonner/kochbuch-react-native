@@ -16,16 +16,4 @@ export default StyleSheet.create({
     fontFamily: 'sans-serif-condensed',
     paddingHorizontal: 25,
   },
-  entry: {
-    paddingVertical: 10,
-    marginHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.lightBorder,
-  },
-  weekday: {
-    color: colors.lightGray,
-    fontSize: 13,
-    fontFamily: 'sans-serif-medium',
-    paddingHorizontal: 5,
-  },
 });
