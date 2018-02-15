@@ -7,6 +7,7 @@ import Fuse from 'fuse.js';
 import moment from 'moment';
 
 import Servings from '../common/Servings/Servings';
+import Loading from '../common/Loading/Loading';
 import * as actions from '../../actions';
 import colors from '../../config/colors';
 import styles from './styles';
@@ -123,7 +124,7 @@ class WeekplanForm extends Component {
 
   render() {
     if (!this.props.recipes || !this.props.weekplan) {
-      return <Text>Lädt...</Text>;
+      return <Loading />;
     }
     const searchResults = !this.state.recipe && this.state.recipeInput.length > 2 ?
       this.fuse.search(this.state.recipeInput) : null;

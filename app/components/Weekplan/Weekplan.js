@@ -7,6 +7,7 @@ import moment from 'moment';
 import 'moment/locale/de';
 
 import Weekday from './Weekday/Weekday';
+import Loading from '../common/Loading/Loading';
 import AddIcon from '../../assets/icons/add_white.png';
 import * as actions from '../../actions';
 import colors from '../../config/colors';
@@ -110,7 +111,7 @@ class Weekplan extends Component {
   }
 
   render() {
-    if (!this.props.weekplan) return <Text>Keinen Wochenplan gefunden :(</Text>;
+    if (!this.props.weekplan) return <Loading />;
     const week = this.getWeek(this.state.week).map(day => (
       <Weekday
         key={day.date}

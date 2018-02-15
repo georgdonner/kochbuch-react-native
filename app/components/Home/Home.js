@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import Fuse from 'fuse.js';
 
 import RecipePreview from './RecipePreview/RecipePreview';
 import Searchbar from './Searchbar/Searchbar';
+import Loading from '../common/Loading/Loading';
 import SearchIcon from '../../assets/icons/search_white.png';
 import { getSettings } from '../../storage/settings';
 import * as actions from '../../actions';
@@ -83,7 +84,7 @@ class Home extends Component {
   }
 
   render() {
-    if (!this.state.recipes) return <Text>Lädt...</Text>;
+    if (!this.state.recipes || !this.props.shoppingList) return <Loading />;
     const searchbar = this.state.searchActive ? (
       <Searchbar
         value={this.state.searchValue}
