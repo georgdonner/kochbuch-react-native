@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Text, ToastAndroid, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 import axios from 'axios';
@@ -74,6 +74,15 @@ class Weekplan extends Component {
     }
   }
 
+  deleteEntry = async (id) => {
+    const plan = this.props.weekplan.filter(e => e._id !== id);
+    await axios.put(`https://georgs-recipes.herokuapp.com/api/plan/${this.props.planCode}`, {
+      plan,
+    });
+    this.props.updateWeekplan(plan);
+    ToastAndroid.show('Eintrag gelöscht', ToastAndroid.SHORT);
+  }
+
   weekText = () => {
     const weekOfYear = moment().add(this.state.week, 'w').isoWeek();
     return this.state.week === 0 ? 'Diese Woche' : `Woche ${weekOfYear}`;
@@ -86,6 +95,7 @@ class Weekplan extends Component {
         key={day.date}
         week={this.state.week} day={day}
         onPressEntry={entry => this.goToRecipe(entry)}
+        onDeleteEntry={id => this.deleteEntry(id)}
       />
     ));
     return (

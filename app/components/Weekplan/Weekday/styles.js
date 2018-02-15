@@ -28,4 +28,28 @@ export default StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical: 2,
   },
+  edit: {
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 45,
+  },
+  back: {
+    paddingHorizontal: 15,
+  },
+  option: {
+    flex: 1,
+  },
+  optionText: {
+    color: colors.darkGray,
+    fontSize: 20,
+    fontFamily: 'sans-serif-condensed',
+    textAlign: 'center',
+  },
+  center: {
+    borderRightWidth: 1,
+    borderRightColor: colors.lightBorder,
+    borderLeftWidth: 1,
+    borderLeftColor: colors.lightBorder,
+  },
 });
