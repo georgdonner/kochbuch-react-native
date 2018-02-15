@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { connect } from 'react-redux';
 import { CheckBox, FormInput } from 'react-native-elements';
 import axios from 'axios';
@@ -65,14 +65,14 @@ class ShoppingList extends Component {
     if (!this.props.shoppingList) return null;
     const list = this.props.shoppingList.map((item, index) => (
       <CheckBox
-        key={item} title={item}
+        key={item} title={item.trim()}
         textStyle={styles.text}
         containerStyle={styles.checkbox}
         onIconPress={() => this.removeItem(index)}
       />
     ));
     return (
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
         <FormInput
           placeholder="Hinzufügen"
           inputStyle={styles.input}
@@ -81,7 +81,7 @@ class ShoppingList extends Component {
           onSubmitEditing={() => this.addItem()}
         />
         {list}
-      </View>
+      </ScrollView>
     );
   }
 }
