@@ -60,7 +60,7 @@ export default StyleSheet.create({
   },
   divider: {
     borderBottomWidth: 1,
-    borderBottomColor: '#e9e9e9',
+    borderBottomColor: colors.lightBorder,
     paddingTop: 10,
     marginHorizontal: 30,
   },
@@ -71,7 +71,7 @@ export default StyleSheet.create({
     marginRight: 5,
     marginLeft: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#e9e9e9',
+    borderBottomColor: colors.lightBorder,
   },
   ingredientText: {
     fontFamily: 'sans-serif-condensed',
