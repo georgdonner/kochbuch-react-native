@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, ToastAndroid, View } from 'react-native';
+import { ScrollView, Text, ToastAndroid, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 import axios from 'axios';
@@ -122,7 +122,7 @@ class Weekplan extends Component {
       />
     ));
     return (
-      <View>
+      <ScrollView>
         <View style={styles.weekNav}>
           <Icon
             name="arrow-back"
@@ -137,7 +137,7 @@ class Weekplan extends Component {
           />
         </View>
         {week}
-      </View>
+      </ScrollView>
     );
   }
 }
