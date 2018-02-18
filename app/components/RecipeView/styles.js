@@ -8,7 +8,7 @@ export default StyleSheet.create({
   },
   duration: {
     position: 'absolute',
-    bottom: 10,
+    bottom: 5,
     right: 15,
     textAlign: 'right',
     color: colors.white,
