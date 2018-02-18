@@ -88,6 +88,14 @@ class Weekplan extends Component {
     }
   }
 
+  newEntry = (date) => {
+    this.props.navigator.push({
+      screen: 'my.WeekplanForm',
+      title: 'Neuer Eintrag',
+      passProps: { entry: { date } },
+    });
+  }
+
   editEntry = (entry) => {
     this.props.navigator.push({
       screen: 'my.WeekplanForm',
@@ -116,6 +124,7 @@ class Weekplan extends Component {
       <Weekday
         key={day.date}
         week={this.state.week} day={day}
+        onPressDate={date => this.newEntry(date)}
         onPressEntry={entry => this.goToRecipe(entry)}
         onEditEntry={entry => this.editEntry(entry)}
         onDeleteEntry={id => this.deleteEntry(id)}

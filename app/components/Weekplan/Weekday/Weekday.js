@@ -62,7 +62,9 @@ export default class Weekday extends Component {
 
     return (
       <View style={styles.entry}>
-        <Text style={styles.weekday}>{weekdayText}</Text>
+        <TouchableOpacity onPress={() => this.props.onPressDate(day.date)}>
+          <Text style={styles.weekday}>{weekdayText}</Text>
+        </TouchableOpacity>
         {recipes}
       </View>
     );
