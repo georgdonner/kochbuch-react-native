@@ -30,7 +30,7 @@ class WeekplanForm extends Component {
 
   async componentDidMount() {
     if (!this.props.weekplan) {
-      const res = await axios.get(`https://georgs-recipes.herokuapp.com/api/plan/${this.props.planCode}`);
+      const res = await axios.get(`/plan/${this.props.planCode}`);
       this.props.updateWeekplan(res.data.plan);
     }
     this.fuse = new Fuse(this.props.recipes, {
@@ -115,7 +115,7 @@ class WeekplanForm extends Component {
       if (this.state.recipe) entry.recipe = this.state.recipe;
       plan = this.props.weekplan.concat([entry]);
     }
-    const res = await axios.put(`https://georgs-recipes.herokuapp.com/api/plan/${this.props.planCode}`, {
+    const res = await axios.put(`/plan/${this.props.planCode}`, {
       plan,
     });
     this.props.updateWeekplan(res.data.plan);

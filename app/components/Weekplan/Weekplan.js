@@ -42,7 +42,7 @@ class Weekplan extends Component {
   }
 
   async componentDidMount() {
-    const res = await axios.get(`https://georgs-recipes.herokuapp.com/api/plan/${this.props.planCode}`);
+    const res = await axios.get(`/plan/${this.props.planCode}`);
     const weekplan = res.data.plan;
     this.props.updateWeekplan(weekplan);
   }
@@ -106,7 +106,7 @@ class Weekplan extends Component {
 
   deleteEntry = async (id) => {
     const plan = this.props.weekplan.filter(e => e._id !== id);
-    await axios.put(`https://georgs-recipes.herokuapp.com/api/plan/${this.props.planCode}`, {
+    await axios.put(`/plan/${this.props.planCode}`, {
       plan,
     });
     this.props.updateWeekplan(plan);

@@ -30,7 +30,7 @@ class ShoppingList extends Component {
   }
 
   async componentDidMount() {
-    const res = await axios.get(`https://georgs-recipes.herokuapp.com/api/list/${this.props.listCode}`);
+    const res = await axios.get(`/list/${this.props.listCode}`);
     const shoppingList = res.data.list;
     this.props.updateShoppingList(shoppingList);
   }
@@ -39,7 +39,7 @@ class ShoppingList extends Component {
     try {
       const list = this.props.shoppingList.concat([this.state.newItem]);
       this.setState({ newItem: '' });
-      await axios.put(`https://georgs-recipes.herokuapp.com/api/list/${this.props.listCode}`, {
+      await axios.put(`/list/${this.props.listCode}`, {
         list,
       });
       this.props.updateShoppingList(list);
@@ -52,7 +52,7 @@ class ShoppingList extends Component {
     try {
       const list = this.props.shoppingList.slice();
       list.splice(index, 1);
-      await axios.put(`https://georgs-recipes.herokuapp.com/api/list/${this.props.listCode}`, {
+      await axios.put(`/list/${this.props.listCode}`, {
         list,
       });
       this.props.updateShoppingList(list);

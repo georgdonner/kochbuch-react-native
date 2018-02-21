@@ -45,7 +45,7 @@ class RecipeView extends Component {
   addToShoppingList = async (item) => {
     const list = this.props.shoppingList.concat([item]);
     this.props.updateShoppingList(list);
-    await axios.put(`https://georgs-recipes.herokuapp.com/api/list/${this.props.listCode}`, {
+    await axios.put(`/list/${this.props.listCode}`, {
       list,
     });
     ToastAndroid.show('Zutat hinzugefügt', ToastAndroid.SHORT);

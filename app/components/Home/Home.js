@@ -48,14 +48,14 @@ class Home extends Component {
       this.props.updateSettings(settings);
     }
     if (!shoppingList) {
-      axios.get(`https://georgs-recipes.herokuapp.com/api/list/${settings.shoppingList}`)
+      axios.get(`/list/${settings.shoppingList}`)
         .then((res) => {
           shoppingList = res.data.list;
           this.props.updateShoppingList(shoppingList);
         });
     }
     if (!recipes) {
-      const res = await axios.get('https://georgs-recipes.herokuapp.com/api/recipes');
+      const res = await axios.get('/recipes');
       recipes = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       this.props.updateRecipes(recipes);
     }
