@@ -33,6 +33,7 @@ class Home extends Component {
     super(props);
     this.state = {
       recipes: null,
+      refreshing: false,
       searchActive: false,
       searchValue: '',
     };
@@ -74,6 +75,12 @@ class Home extends Component {
     });
   }
 
+  refresh = async () => {
+    this.setState({ refreshing: true });
+    await this.props.refresh();
+    this.setState({ refreshing: false });
+  }
+
   render() {
     if (!this.state.recipes || !this.props.shoppingList) return <Loading />;
     const searchbar = this.state.searchActive ? (
@@ -102,6 +109,8 @@ class Home extends Component {
             ({ item }) => <RecipePreview recipe={item} navigator={this.props.navigator} />
           }
           keyExtractor={item => item._id}
+          onRefresh={this.refresh}
+          refreshing={this.state.refreshing}
           removeClippedSubviews
         />
       </View>
@@ -116,6 +125,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  refresh: () => dispatch(actions.fetchRecipes()),
   updateRecipes: recipes => dispatch(actions.updateRecipes(recipes)),
 });
 
