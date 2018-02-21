@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, ToastAndroid, View } from 'react-native';
 import { connect } from 'react-redux';
 import { CheckBox, FormInput } from 'react-native-elements';
 import axios from 'axios';
@@ -40,7 +40,7 @@ class ShoppingList extends Component {
       });
       this.props.updateShoppingList(list);
     } catch (error) {
-      console.error(error);
+      ToastAndroid.show('Keine Internetverbindung', ToastAndroid.SHORT);
     }
   }
 
@@ -53,7 +53,7 @@ class ShoppingList extends Component {
       });
       this.props.updateShoppingList(list);
     } catch (error) {
-      console.error(error);
+      ToastAndroid.show('Keine Internetverbindung', ToastAndroid.SHORT);
     }
   }
 

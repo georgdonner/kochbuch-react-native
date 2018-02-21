@@ -100,12 +100,16 @@ class Weekplan extends Component {
   }
 
   deleteEntry = async (id) => {
-    const plan = this.props.weekplan.filter(e => e._id !== id);
-    await axios.put(`/plan/${this.props.planCode}`, {
-      plan,
-    });
-    this.props.updateWeekplan(plan);
-    ToastAndroid.show('Eintrag gelöscht', ToastAndroid.SHORT);
+    try {
+      const plan = this.props.weekplan.filter(e => e._id !== id);
+      await axios.put(`/plan/${this.props.planCode}`, {
+        plan,
+      });
+      this.props.updateWeekplan(plan);
+      ToastAndroid.show('Eintrag gelöscht', ToastAndroid.SHORT);
+    } catch (error) {
+      ToastAndroid.show('Keine Internetverbindung', ToastAndroid.SHORT);
+    }
   }
 
   weekText = () => {

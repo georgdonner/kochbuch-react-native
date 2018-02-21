@@ -44,12 +44,16 @@ class RecipeView extends Component {
   }
 
   addToShoppingList = async (item) => {
-    const list = this.props.shoppingList.concat([item]);
-    this.props.updateShoppingList(list);
-    await axios.put(`/list/${this.props.listCode}`, {
-      list,
-    });
-    ToastAndroid.show('Zutat hinzugefügt', ToastAndroid.SHORT);
+    try {
+      const list = this.props.shoppingList.concat([item]);
+      this.props.updateShoppingList(list);
+      await axios.put(`/list/${this.props.listCode}`, {
+        list,
+      });
+      ToastAndroid.show('Zutat hinzugefügt', ToastAndroid.SHORT);
+    } catch (error) {
+      ToastAndroid.show('Keine Internetverbindung', ToastAndroid.SHORT);
+    }
   }
 
   render() {

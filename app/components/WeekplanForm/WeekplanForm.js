@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { DatePickerAndroid, ScrollView, Text, TimePickerAndroid, TouchableOpacity, View } from 'react-native';
+import {
+  DatePickerAndroid, ScrollView, Text, ToastAndroid,
+  TimePickerAndroid, TouchableOpacity, View,
+} from 'react-native';
 import { connect } from 'react-redux';
 import { Button, FormInput, FormLabel, List, ListItem } from 'react-native-elements';
 import axios from 'axios';
@@ -111,11 +114,15 @@ class WeekplanForm extends Component {
       if (this.state.recipe) entry.recipe = this.state.recipe;
       plan = this.props.weekplan.concat([entry]);
     }
-    const res = await axios.put(`/plan/${this.props.planCode}`, {
-      plan,
-    });
-    this.props.updateWeekplan(res.data.plan);
-    this.props.navigator.pop();
+    try {
+      const res = await axios.put(`/plan/${this.props.planCode}`, {
+        plan,
+      });
+      this.props.updateWeekplan(res.data.plan);
+      this.props.navigator.pop();
+    } catch (error) {
+      ToastAndroid.show('Keine Internetverbindung', ToastAndroid.SHORT);
+    }
   }
 
   render() {
