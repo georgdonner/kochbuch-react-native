@@ -6,6 +6,7 @@ import axios from 'axios';
 
 import Alert from '../common/Alert/Alert';
 import Loading from '../common/Loading/Loading';
+import MessageScreen from '../common/MessageScreen/MessageScreen';
 import * as actions from '../../actions';
 import colors from '../../config/colors';
 import styles from './styles';
@@ -58,7 +59,16 @@ class ShoppingList extends Component {
   }
 
   render() {
-    if (!this.props.shoppingList) return <Loading />;
+    const message = 'Bitte fügen Sie in den Einstellungen einen Einkaufslisten Code hinzu, um die Einkaufsliste zu nutzen.';
+    if (!this.props.listCode) {
+      return (
+        <MessageScreen
+          message={message}
+          buttonText="Zu den Einstellungen"
+          onPress={() => this.props.navigator.push({ screen: 'my.Settings', title: 'Einstellungen' })}
+        />
+      );
+    } else if (!this.props.shoppingList) return <Loading />;
     const list = this.props.shoppingList.map((item, index) => (
       <CheckBox
         key={item} title={item.trim()}

@@ -9,6 +9,7 @@ import 'moment/locale/de';
 import Weekday from './Weekday/Weekday';
 import Alert from '../common/Alert/Alert';
 import Loading from '../common/Loading/Loading';
+import MessageScreen from '../common/MessageScreen/MessageScreen';
 import AddIcon from '../../assets/icons/add_white.png';
 import * as actions from '../../actions';
 import colors from '../../config/colors';
@@ -118,7 +119,16 @@ class Weekplan extends Component {
   }
 
   render() {
-    if (!this.props.weekplan) return <Loading />;
+    const message = 'Bitte fügen Sie in den Einstellungen einen Wochenplan Code hinzu, um den Wochenplan zu nutzen.';
+    if (!this.props.planCode) {
+      return (
+        <MessageScreen
+          message={message}
+          buttonText="Zu den Einstellungen"
+          onPress={() => this.props.navigator.push({ screen: 'my.Settings', title: 'Einstellungen' })}
+        />
+      );
+    } else if (!this.props.weekplan) return <Loading />;
     const week = this.getWeek(this.state.week).map(day => (
       <Weekday
         key={day.date}
