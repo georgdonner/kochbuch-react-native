@@ -13,7 +13,13 @@ export const updateShoppingList = (list) => {
 export const fetchShoppingList = code => async (dispatch) => {
   try {
     const res = await axios.get(`/list/${code}`);
-    dispatch(updateShoppingList(res.data.list));
+    let newList = [];
+    if (!res.data) {
+      await axios.put(`/list/${code}`, { list: newList });
+    } else {
+      newList = res.data.list;
+    }
+    dispatch(updateShoppingList(newList));
   } catch (error) {
     console.error(error);
   }
@@ -30,7 +36,13 @@ export const updateWeekplan = (plan) => {
 export const fetchWeekplan = code => async (dispatch) => {
   try {
     const res = await axios.get(`/plan/${code}`);
-    dispatch(updateWeekplan(res.data.plan));
+    let newPlan = [];
+    if (!res.data) {
+      await axios.put(`/plan/${code}`, { plan: newPlan });
+    } else {
+      newPlan = res.data.plan;
+    }
+    dispatch(updateWeekplan(newPlan));
   } catch (error) {
     console.error(error);
   }

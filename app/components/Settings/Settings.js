@@ -20,16 +20,22 @@ class Settings extends Component {
     this.state = { ...props.settings };
   }
 
+  formatCode = code => code.toLowerCase().replace(/[^(a-z|0-9)]+/g, '')
+
   updateSettings = async () => {
-    await setSettings(this.state);
+    const settings = {
+      shoppingList: this.formatCode(this.state.shoppingList),
+      weekplan: this.formatCode(this.state.weekplan),
+    };
+    await setSettings(settings);
     const { shoppingList, weekplan } = this.props.settings;
-    if (this.state.shoppingList !== shoppingList) {
-      this.props.fetchShoppingList(this.state.shoppingList);
+    if (settings.shoppingList !== shoppingList) {
+      this.props.fetchShoppingList(settings.shoppingList);
     }
-    if (this.state.weekplan !== weekplan) {
-      this.props.fetchWeekplan(this.state.weekplan);
+    if (settings.weekplan !== weekplan) {
+      this.props.fetchWeekplan(settings.weekplan);
     }
-    this.props.updateSettings(this.state);
+    this.props.updateSettings(settings);
     this.props.navigator.pop();
   }
 

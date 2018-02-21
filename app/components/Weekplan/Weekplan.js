@@ -23,10 +23,6 @@ class Weekplan extends Component {
       id: 'sideMenu',
       buttonColor: colors.white,
     }],
-    rightButtons: [{
-      id: 'new',
-      icon: AddIcon,
-    }],
   };
 
   static navigatorStyle = {
@@ -40,7 +36,13 @@ class Weekplan extends Component {
     this.state = {
       week: 0,
     };
-    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+    if (props.planCode) this.setButtons();
+    props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.planCode && nextProps.planCode) this.setButtons();
+    else if (this.props.planCode && !nextProps.planCode) this.setButtons(false);
   }
 
   onNavigatorEvent = (event) => {
@@ -49,6 +51,15 @@ class Weekplan extends Component {
         this.props.navigator.push({ screen: 'my.WeekplanForm', title: 'Neuer Eintrag' });
       }
     }
+  }
+
+  setButtons = (visible = true) => {
+    this.props.navigator.setButtons({
+      rightButtons: visible ? [{
+        id: 'new',
+        icon: AddIcon,
+      }] : [],
+    });
   }
 
   getWeek = (offset = 0) => {
