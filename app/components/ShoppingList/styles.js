@@ -22,5 +22,8 @@ export default StyleSheet.create({
   input: {
     fontSize: 18,
     color: colors.darkGray,
+    marginBottom: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.lightBorder,
   },
 });
