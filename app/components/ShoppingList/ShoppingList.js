@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { CheckBox, FormInput } from 'react-native-elements';
 import axios from 'axios';
 
+import Loading from '../common/Loading/Loading';
 import * as actions from '../../actions';
 import colors from '../../config/colors';
 import styles from './styles';
@@ -27,12 +28,6 @@ class ShoppingList extends Component {
     this.state = {
       newItem: '',
     };
-  }
-
-  async componentDidMount() {
-    const res = await axios.get(`/list/${this.props.listCode}`);
-    const shoppingList = res.data.list;
-    this.props.updateShoppingList(shoppingList);
   }
 
   async addItem() {
@@ -62,7 +57,7 @@ class ShoppingList extends Component {
   }
 
   render() {
-    if (!this.props.shoppingList) return null;
+    if (!this.props.shoppingList) return <Loading />;
     const list = this.props.shoppingList.map((item, index) => (
       <CheckBox
         key={item} title={item.trim()}

@@ -7,6 +7,7 @@ import axios from 'axios';
 import registerScreens from './app/screens';
 import colors from './app/config/colors';
 import reducer from './app/reducers';
+import init from './app/actions/init';
 
 axios.defaults.baseURL = 'https://georgs-recipes.herokuapp.com/api';
 
@@ -16,6 +17,8 @@ const store = createStore(
 );
 
 registerScreens(store, Provider);
+
+store.dispatch(init());
 
 Navigation.startSingleScreenApp({
   screen: {

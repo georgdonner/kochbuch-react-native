@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import { FlatList, View } from 'react-native';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import Fuse from 'fuse.js';
 
 import RecipePreview from './RecipePreview/RecipePreview';
 import Searchbar from './Searchbar/Searchbar';
 import Loading from '../common/Loading/Loading';
 import SearchIcon from '../../assets/icons/search_white.png';
-import { getSettings } from '../../storage/settings';
 import * as actions from '../../actions';
 import colors from '../../config/colors';
 import styles from './styles';
@@ -41,35 +39,13 @@ class Home extends Component {
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
 
-  async componentDidMount() {
-    let { recipes, settings, shoppingList } = this.props;
-    if (!settings) {
-      settings = await getSettings();
-      this.props.updateSettings(settings);
-    }
-    if (!shoppingList) {
-      axios.get(`/list/${settings.shoppingList}`)
-        .then((res) => {
-          shoppingList = res.data.list;
-          this.props.updateShoppingList(shoppingList);
-        });
-    }
-    if (!recipes) {
-      const res = await axios.get('/recipes');
-      recipes = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      this.props.updateRecipes(recipes);
-    }
-    this.setState({ recipes });
-    this.fuse = new Fuse(recipes, {
-      shouldSort: true,
-      threshold: 0.33,
-      keys: [
-        'title',
-        'ingredients.name',
-        'categories',
-      ],
-      minMatchCharLength: 2,
-    });
+  componentDidMount() {
+    const { recipes } = this.props;
+    if (recipes) this.init(recipes);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.recipes !== nextProps.recipes) this.init(nextProps.recipes);
   }
 
   onNavigatorEvent = (event) => {
@@ -81,6 +57,20 @@ class Home extends Component {
         });
       }
     }
+  }
+
+  init = (recipes) => {
+    this.setState({ recipes });
+    this.fuse = new Fuse(recipes, {
+      shouldSort: true,
+      threshold: 0.33,
+      keys: [
+        'title',
+        'ingredients.name',
+        'categories',
+      ],
+      minMatchCharLength: 2,
+    });
   }
 
   render() {
@@ -119,14 +109,11 @@ class Home extends Component {
 
 const mapStateToProps = state => ({
   recipes: state.recipes,
-  settings: state.settings,
   shoppingList: state.user.shoppingList,
 });
 
 const mapDispatchToProps = dispatch => ({
   updateRecipes: recipes => dispatch(actions.updateRecipes(recipes)),
-  updateSettings: settings => dispatch(actions.updateSettings(settings)),
-  updateShoppingList: list => dispatch(actions.updateShoppingList(list)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

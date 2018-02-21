@@ -41,12 +41,6 @@ class Weekplan extends Component {
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
 
-  async componentDidMount() {
-    const res = await axios.get(`/plan/${this.props.planCode}`);
-    const weekplan = res.data.plan;
-    this.props.updateWeekplan(weekplan);
-  }
-
   onNavigatorEvent = (event) => {
     if (event.type === 'NavBarButtonPress') {
       if (event.id === 'new') {

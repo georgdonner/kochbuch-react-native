@@ -17,6 +17,7 @@
     "start": "react-native start",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "lint": "eslint app",
     "test": "node node_modules/jest/bin/jest.js"
   },
   "jest": {

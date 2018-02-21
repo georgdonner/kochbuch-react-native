@@ -29,10 +29,6 @@ class WeekplanForm extends Component {
   }
 
   async componentDidMount() {
-    if (!this.props.weekplan) {
-      const res = await axios.get(`/plan/${this.props.planCode}`);
-      this.props.updateWeekplan(res.data.plan);
-    }
     this.fuse = new Fuse(this.props.recipes, {
       shouldSort: true,
       threshold: 0.33,
