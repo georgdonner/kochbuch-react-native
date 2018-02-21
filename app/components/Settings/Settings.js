@@ -22,6 +22,13 @@ class Settings extends Component {
 
   updateSettings = async () => {
     await setSettings(this.state);
+    const { shoppingList, weekplan } = this.props.settings;
+    if (this.state.shoppingList !== shoppingList) {
+      this.props.fetchShoppingList(this.state.shoppingList);
+    }
+    if (this.state.weekplan !== weekplan) {
+      this.props.fetchWeekplan(this.state.weekplan);
+    }
     this.props.updateSettings(this.state);
     this.props.navigator.pop();
   }
@@ -58,6 +65,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  fetchShoppingList: code => dispatch(actions.fetchShoppingList(code)),
+  fetchWeekplan: code => dispatch(actions.fetchWeekplan(code)),
   updateSettings: settings => dispatch(actions.updateSettings(settings)),
 });
 

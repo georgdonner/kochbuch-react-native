@@ -1,3 +1,8 @@
 export { updateRecipes } from './recipes';
 export { updateSettings } from './settings';
-export { updateShoppingList, updateWeekplan } from './user';
+export {
+  fetchShoppingList,
+  updateShoppingList,
+  fetchWeekplan,
+  updateWeekplan,
+} from './user';
