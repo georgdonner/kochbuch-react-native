@@ -1,12 +1,25 @@
 import axios from 'axios';
 
 import { FETCH_FAILED, FETCH_SUCCESS } from './actionTypes';
-import { getSettings } from '../storage';
+import { getRecipes, getSettings, getShoppingList, getWeekplan } from '../storage';
 import { updateRecipes, updateSettings, updateShoppingList, updateWeekplan } from './index';
 
 const fetchFailed = () => ({ type: FETCH_FAILED });
 
 const fetchSuccess = () => ({ type: FETCH_SUCCESS });
+
+const readFromStorage = () => async (dispatch) => {
+  try {
+    const recipes = await getRecipes();
+    const list = await getShoppingList();
+    const plan = await getWeekplan();
+    dispatch(updateRecipes(recipes));
+    dispatch(updateShoppingList(list));
+    dispatch(updateWeekplan(plan));
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export default () => async (dispatch) => {
   try {
@@ -27,6 +40,7 @@ export default () => async (dispatch) => {
       else dispatch(updateRecipes(data));
     });
   } catch (error) {
+    dispatch(readFromStorage());
     dispatch(fetchFailed());
   }
 };

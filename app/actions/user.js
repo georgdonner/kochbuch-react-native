@@ -1,10 +1,14 @@
 import axios from 'axios';
 import { UPDATE_SHOPPING_LIST, UPDATE_WEEKPLAN } from './actionTypes';
+import { setShoppingList, setWeekplan } from '../storage';
 
-export const updateShoppingList = list => ({
-  type: UPDATE_SHOPPING_LIST,
-  list,
-});
+export const updateShoppingList = (list) => {
+  setShoppingList(list);
+  return {
+    type: UPDATE_SHOPPING_LIST,
+    list,
+  };
+};
 
 export const fetchShoppingList = code => async (dispatch) => {
   try {
@@ -15,10 +19,13 @@ export const fetchShoppingList = code => async (dispatch) => {
   }
 };
 
-export const updateWeekplan = plan => ({
-  type: UPDATE_WEEKPLAN,
-  plan,
-});
+export const updateWeekplan = (plan) => {
+  setWeekplan(plan);
+  return {
+    type: UPDATE_WEEKPLAN,
+    plan,
+  };
+};
 
 export const fetchWeekplan = code => async (dispatch) => {
   try {
