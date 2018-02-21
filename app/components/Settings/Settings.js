@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Button, FormLabel, FormInput } from 'react-native-elements';
 
 import * as actions from '../../actions';
-import { setSettings } from '../../storage/settings';
+import { setSettings } from '../../storage';
 import colors from '../../config/colors';
 import styles from './styles';
 

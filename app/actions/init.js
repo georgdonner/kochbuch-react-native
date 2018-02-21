@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { FETCH_FAILED, FETCH_SUCCESS } from './actionTypes';
-import { getSettings } from '../storage/settings';
+import { getSettings } from '../storage';
 import { updateRecipes, updateSettings, updateShoppingList, updateWeekplan } from './index';
 
 const fetchFailed = () => ({ type: FETCH_FAILED });
