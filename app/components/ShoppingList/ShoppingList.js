@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { connect } from 'react-redux';
 import { CheckBox, FormInput } from 'react-native-elements';
 import axios from 'axios';
 
+import Alert from '../common/Alert/Alert';
 import Loading from '../common/Loading/Loading';
 import * as actions from '../../actions';
 import colors from '../../config/colors';
@@ -67,16 +68,19 @@ class ShoppingList extends Component {
       />
     ));
     return (
-      <ScrollView contentContainerStyle={styles.container}>
-        <FormInput
-          placeholder="Hinzufügen"
-          inputStyle={styles.input}
-          value={this.state.newItem}
-          onChangeText={text => this.setState({ newItem: text })}
-          onSubmitEditing={() => this.addItem()}
-        />
-        {list}
-      </ScrollView>
+      <View>
+        <Alert />
+        <ScrollView contentContainerStyle={styles.container}>
+          <FormInput
+            placeholder="Hinzufügen"
+            inputStyle={styles.input}
+            value={this.state.newItem}
+            onChangeText={text => this.setState({ newItem: text })}
+            onSubmitEditing={() => this.addItem()}
+          />
+          {list}
+        </ScrollView>
+      </View>
     );
   }
 }

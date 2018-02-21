@@ -7,6 +7,7 @@ import moment from 'moment';
 import 'moment/locale/de';
 
 import Weekday from './Weekday/Weekday';
+import Alert from '../common/Alert/Alert';
 import Loading from '../common/Loading/Loading';
 import AddIcon from '../../assets/icons/add_white.png';
 import * as actions from '../../actions';
@@ -125,22 +126,25 @@ class Weekplan extends Component {
       />
     ));
     return (
-      <ScrollView>
-        <View style={styles.weekNav}>
-          <Icon
-            name="arrow-back"
-            color={colors.darkGray}
-            onPress={() => this.setState({ week: this.state.week - 1 })}
-          />
-          <Text style={styles.weekNavText}>{this.weekText()}</Text>
-          <Icon
-            name="arrow-forward"
-            color={colors.darkGray}
-            onPress={() => this.setState({ week: this.state.week + 1 })}
-          />
-        </View>
-        {week}
-      </ScrollView>
+      <View>
+        <Alert />
+        <ScrollView>
+          <View style={styles.weekNav}>
+            <Icon
+              name="arrow-back"
+              color={colors.darkGray}
+              onPress={() => this.setState({ week: this.state.week - 1 })}
+            />
+            <Text style={styles.weekNavText}>{this.weekText()}</Text>
+            <Icon
+              name="arrow-forward"
+              color={colors.darkGray}
+              onPress={() => this.setState({ week: this.state.week + 1 })}
+            />
+          </View>
+          {week}
+        </ScrollView>
+      </View>
     );
   }
 }

@@ -5,6 +5,7 @@ import { Icon } from 'react-native-elements';
 import Markdown from 'react-native-simple-markdown';
 import axios from 'axios';
 
+import Alert from '../common/Alert/Alert';
 import BottomGradient from '../common/BottomGradient/BottomGradient';
 import Servings from '../common/Servings/Servings';
 import calcServings from '../../utils/calcServings';
@@ -73,40 +74,43 @@ class RecipeView extends Component {
       );
     });
     return (
-      <ScrollView>
-        <View style={styles.image}>
-          <Image
-            source={{
-              uri: this.props.recipe.heroImage ? this.props.recipe.heroImage.replace('w:2000', 'w:600') :
-              'http://timgratton.com/wp-content/uploads/2018/01/placeholder-600x400.png',
-            }}
-            style={styles.image}
+      <View>
+        <Alert />
+        <ScrollView>
+          <View style={styles.image}>
+            <Image
+              source={{
+                uri: this.props.recipe.heroImage ? this.props.recipe.heroImage.replace('w:2000', 'w:600') :
+                'http://timgratton.com/wp-content/uploads/2018/01/placeholder-600x400.png',
+              }}
+              style={styles.image}
+            />
+            <BottomGradient />
+            <Text style={styles.duration}>{this.props.recipe.duration} Min.</Text>
+          </View>
+          <Text style={styles.title}>{this.props.recipe.title}</Text>
+          <View style={styles.categories}>{categories}</View>
+          <Servings
+            servings={this.state.servings}
+            onDecrement={() => this.setState({ servings: this.state.servings - 1 || 1 })}
+            onIncrement={() => this.setState({ servings: this.state.servings + 1 })}
           />
-          <BottomGradient />
-          <Text style={styles.duration}>{this.props.recipe.duration} Min.</Text>
-        </View>
-        <Text style={styles.title}>{this.props.recipe.title}</Text>
-        <View style={styles.categories}>{categories}</View>
-        <Servings
-          servings={this.state.servings}
-          onDecrement={() => this.setState({ servings: this.state.servings - 1 || 1 })}
-          onIncrement={() => this.setState({ servings: this.state.servings + 1 })}
-        />
-        <View style={styles.divider} />
-        <Text style={styles.title}>Zutaten</Text>
-        {ingredients}
-        <Text style={styles.title}>Beschreibung</Text>
-        <Markdown
-          style={styles.description}
-          styles={{
-            paragraph: styles.descriptionParagraph,
-            text: styles.descriptionText,
-            view: styles.description,
-          }}
-        >
-          {this.props.recipe.description}
-        </Markdown>
-      </ScrollView>
+          <View style={styles.divider} />
+          <Text style={styles.title}>Zutaten</Text>
+          {ingredients}
+          <Text style={styles.title}>Beschreibung</Text>
+          <Markdown
+            style={styles.description}
+            styles={{
+              paragraph: styles.descriptionParagraph,
+              text: styles.descriptionText,
+              view: styles.description,
+            }}
+          >
+            {this.props.recipe.description}
+          </Markdown>
+        </ScrollView>
+      </View>
     );
   }
 }

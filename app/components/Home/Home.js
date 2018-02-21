@@ -5,6 +5,7 @@ import Fuse from 'fuse.js';
 
 import RecipePreview from './RecipePreview/RecipePreview';
 import Searchbar from './Searchbar/Searchbar';
+import Alert from '../common/Alert/Alert';
 import Loading from '../common/Loading/Loading';
 import SearchIcon from '../../assets/icons/search_white.png';
 import * as actions from '../../actions';
@@ -94,6 +95,7 @@ class Home extends Component {
     return (
       <View style={styles.container}>
         {searchbar}
+        <Alert />
         <FlatList
           data={this.state.recipes}
           renderItem={
@@ -110,6 +112,7 @@ class Home extends Component {
 const mapStateToProps = state => ({
   recipes: state.recipes,
   shoppingList: state.user.shoppingList,
+  fetchFailed: state.status.fetchFailed,
 });
 
 const mapDispatchToProps = dispatch => ({
