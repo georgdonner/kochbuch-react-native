@@ -14,15 +14,6 @@ export const updateRecipes = (recipes) => {
   };
 };
 
-// export const fetchRecipes = () => dispatch => (
-//   axios.get('/recipes')
-//     .then((res) => {
-//       dispatch(updateRecipes(res.data));
-//       return res.data;
-//     })
-//     .catch(err => console.error(err))
-// );
-
 export const fetchRecipes = () => async (dispatch) => {
   try {
     const res = await axios.get('/recipes');

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, ToastAndroid, View } from 'react-native';
+import { RefreshControl, ScrollView, Text, ToastAndroid, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 import axios from 'axios';
@@ -35,6 +35,7 @@ class Weekplan extends Component {
     super(props);
     this.state = {
       week: 0,
+      refreshing: false,
     };
     if (props.planCode) this.setButtons();
     props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
@@ -61,6 +62,17 @@ class Weekplan extends Component {
       }] : [],
     });
   }
+
+  getRefresher = () => (
+    <RefreshControl
+      onRefresh={async () => {
+        this.setState({ refreshing: true });
+        await this.props.fetchWeekplan(this.props.planCode);
+        this.setState({ refreshing: false });
+      }}
+      refreshing={this.state.refreshing}
+    />
+  )
 
   getWeek = (offset = 0) => {
     const start = moment().startOf('isoWeek').add(offset, 'w');
@@ -153,7 +165,7 @@ class Weekplan extends Component {
     return (
       <View>
         <Alert />
-        <ScrollView>
+        <ScrollView refreshControl={this.getRefresher()}>
           <View style={styles.weekNav}>
             <Icon
               name="arrow-back"
@@ -181,6 +193,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  fetchWeekplan: code => dispatch(actions.fetchWeekplan(code)),
   updateWeekplan: plan => dispatch(actions.updateWeekplan(plan)),
 });
 

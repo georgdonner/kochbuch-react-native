@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, ToastAndroid, View } from 'react-native';
+import { RefreshControl, ScrollView, ToastAndroid, View } from 'react-native';
 import { connect } from 'react-redux';
 import { CheckBox, FormInput } from 'react-native-elements';
 import axios from 'axios';
@@ -29,8 +29,20 @@ class ShoppingList extends Component {
     super(props);
     this.state = {
       newItem: '',
+      refreshing: false,
     };
   }
+
+  getRefresher = () => (
+    <RefreshControl
+      onRefresh={async () => {
+        this.setState({ refreshing: true });
+        await this.props.fetchShoppingList(this.props.listCode);
+        this.setState({ refreshing: false });
+      }}
+      refreshing={this.state.refreshing}
+    />
+  )
 
   async addItem() {
     try {
@@ -80,7 +92,7 @@ class ShoppingList extends Component {
     return (
       <View>
         <Alert />
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView refreshControl={this.getRefresher()} contentContainerStyle={styles.container}>
           <FormInput
             placeholder="Hinzufügen"
             inputStyle={styles.input}
@@ -101,6 +113,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  fetchShoppingList: code => dispatch(actions.fetchShoppingList(code)),
   updateShoppingList: list => dispatch(actions.updateShoppingList(list)),
 });
 
