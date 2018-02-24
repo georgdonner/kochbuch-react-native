@@ -99,7 +99,7 @@ class Weekplan extends Component {
           screen: 'my.Recipe',
           title: recipe.title,
           passProps: {
-            recipe,
+            id: recipe._id,
             servings: entry.servings,
           },
         });

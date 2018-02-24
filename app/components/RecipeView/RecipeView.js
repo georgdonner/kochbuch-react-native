@@ -76,9 +76,7 @@ class RecipeView extends Component {
           const url = 'https://www.filestackapi.com/api/store/S3?key=AwD48ceQaWtGBs9plMog7z';
           this.setState({ uploading: true });
           const res = await axios.post(url, data);
-          const handle = res.data.url.split('/').pop();
-          const heroImage = `https://process.filestackapi.com/resize=w:2000,fit:max/quality=value:80/compress/${handle}`;
-          await axios.put(`/recipe/${this.props.recipe._id}`, { heroImage }, { json: true });
+          await this.updateImage(res.data.url);
           this.setState({ uploading: false });
         } catch (error) {
           this.setState({ uploading: false });
@@ -87,6 +85,17 @@ class RecipeView extends Component {
         }
       }
     });
+  }
+
+  updateImage = async (url) => {
+    const handle = url.split('/').pop();
+    const heroImage = `https://process.filestackapi.com/resize=w:2000,fit:max/quality=value:80/compress/${handle}`;
+    await axios.put(`/recipe/${this.props.recipe._id}`, { heroImage }, { json: true });
+    const updated = this.props.recipes.map((recipe) => {
+      if (recipe._id === this.props.recipe._id) return { ...recipe, heroImage };
+      return recipe;
+    });
+    this.props.updateRecipes(updated);
   }
 
   render() {
@@ -157,12 +166,15 @@ class RecipeView extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
+  recipe: state.recipes.find(recipe => recipe._id === ownProps.id),
+  recipes: state.recipes,
   listCode: state.settings.shoppingList,
   shoppingList: state.user.shoppingList,
 });
 
 const mapDispatchToProps = dispatch => ({
+  updateRecipes: recipes => dispatch(actions.updateRecipes(recipes)),
   updateShoppingList: list => dispatch(actions.updateShoppingList(list)),
 });
 

@@ -17,7 +17,7 @@ export default (props) => {
     <View style={styles.recipe}>
       <TouchableNativeFeedback
         onPress={() => {
-          props.navigator.push({ screen: 'my.Recipe', title: props.recipe.title, passProps: { recipe: props.recipe } });
+          props.navigator.push({ screen: 'my.Recipe', title: props.recipe.title, passProps: { id: props.recipe._id } });
         }}
       >
         <View>
