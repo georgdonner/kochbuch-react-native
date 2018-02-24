@@ -11,7 +11,7 @@ export default (ingr, origServings, newServings) => {
   // get the quantity as a number (is -1 when there is none)
   const quantity = getQuantity(ingr.name);
   const newQuantity = quantity * (newServings / origServings);
-  const converted = convertMetrics(ingr.name);
+  const converted = convertMetrics(ingr.name, quantity, newQuantity);
   const formatted = origServings === newServings ?
     beautifulNumber(quantity) :
     beautifulNumber(newQuantity);
@@ -62,7 +62,7 @@ const getQuantityString = (value) => {
   return match ? match[0] : null;
 };
 
-const convertMetrics = (ingr, qty, newServings, origServings) => {
+const convertMetrics = (ingr, qty, newQty) => {
   // check if the unit is metric
   const validMetric = /\d+\s?(g|kg|ml|l)\s+/i;
 
@@ -70,24 +70,24 @@ const convertMetrics = (ingr, qty, newServings, origServings) => {
     return ingr;
   }
   const metricString = ingr.match(validMetric)[0];
-  // calculate new quantity, because var quantity is not re-calculated yet
-  const calculatedQty = qty * (newServings / origServings);
+
   // check which unit and if new quantity reaches breakpoint
-  if (metricString.match(/[^k][g]/i) && calculatedQty >= 1000) {
+  if (metricString.match(/[^k][g]/i) && newQty >= 1000) {
+    console.log('to kg');
     return ingr
-      .replace(getQuantityString(ingr), qty / 1000)
+      .replace(getQuantityString(ingr), newQty / 1000)
       .replace(/[g]/i, 'kg');
-  } else if (metricString.match(/[k][g]/i) && calculatedQty < 1) {
+  } else if (metricString.match(/[k][g]/i) && newQty < 1000) {
     return ingr
-      .replace(getQuantityString(ingr), qty * 1000)
+      .replace(getQuantityString(ingr), newQty * 1000)
       .replace(/[k][g]/i, 'g');
-  } else if (metricString.match(/[m][l]/i) && calculatedQty >= 1000) {
+  } else if (metricString.match(/[m][l]/i) && newQty >= 1000) {
     return ingr
-      .replace(getQuantityString(ingr), qty / 1000)
+      .replace(getQuantityString(ingr), newQty / 1000)
       .replace(/[m][l]/i, 'l');
-  } else if (metricString.match(/[^m][l]/i) && calculatedQty < 1) {
+  } else if (metricString.match(/[^m][l]/i) && newQty < 1000) {
     return ingr
-      .replace(getQuantityString(ingr), qty * 1000)
+      .replace(getQuantityString(ingr), newQty * 1000)
       .replace(/[l]/i, 'ml');
   }
   return ingr;
