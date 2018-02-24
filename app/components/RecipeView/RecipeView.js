@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { Image, ScrollView, Text, ToastAndroid, View } from 'react-native';
+import { Image, ScrollView, Text, ToastAndroid, TouchableNativeFeedback, View } from 'react-native';
 import { connect } from 'react-redux';
-import { Button, Icon } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import Markdown from 'react-native-simple-markdown';
 import ImagePicker from 'react-native-image-picker';
 import axios from 'axios';
 
 import Alert from '../common/Alert/Alert';
 import BottomGradient from '../common/BottomGradient/BottomGradient';
+import Loading from '../common/Loading/Loading';
 import Servings from '../common/Servings/Servings';
 import calcServings from '../../utils/calcServings';
 import * as actions from '../../actions';
@@ -27,6 +28,7 @@ class RecipeView extends Component {
     super(props);
     this.state = {
       servings: props.servings || props.recipe.servings,
+      uploading: false,
     };
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
@@ -63,25 +65,34 @@ class RecipeView extends Component {
       allowsEditing: true,
     };
     ImagePicker.launchImageLibrary(options, async (response) => {
-      const data = new FormData();
-      data.append('fileUpload', {
-        uri: response.uri,
-        type: response.type,
-        name: response.fileName,
-      });
-      try {
-        const url = 'https://www.filestackapi.com/api/store/S3?key=AwD48ceQaWtGBs9plMog7z';
-        const res = await axios.post(url, data);
-        const handle = res.data.url.split('/').pop();
-        const heroImage = `https://process.filestackapi.com/resize=w:2000,fit:max/quality=value:80/compress/${handle}`;
-        await axios.put(`/recipe/${this.props.recipe._id}`, { heroImage }, { json: true });
-      } catch (error) {
-        console.error(error.message);
+      if (!response.didCancel && !response.error) {
+        const data = new FormData();
+        data.append('fileUpload', {
+          uri: response.uri,
+          type: response.type,
+          name: response.fileName,
+        });
+        try {
+          const url = 'https://www.filestackapi.com/api/store/S3?key=AwD48ceQaWtGBs9plMog7z';
+          this.setState({ uploading: true });
+          const res = await axios.post(url, data);
+          const handle = res.data.url.split('/').pop();
+          const heroImage = `https://process.filestackapi.com/resize=w:2000,fit:max/quality=value:80/compress/${handle}`;
+          await axios.put(`/recipe/${this.props.recipe._id}`, { heroImage }, { json: true });
+          this.setState({ uploading: false });
+        } catch (error) {
+          this.setState({ uploading: false });
+          ToastAndroid.show('Es ist ein Fehler beim Hochladen des Bildes aufgetreten', ToastAndroid.SHORT);
+          console.error(error.message);
+        }
       }
     });
   }
 
   render() {
+    if (this.state.uploading) {
+      return <Loading message="Bild wird hochgeladen" />;
+    }
     const categories = this.props.recipe.categories.map(cat => (
       <View key={cat}><Text style={styles.category}># {cat.toUpperCase()}</Text></View>
     ));
@@ -106,17 +117,19 @@ class RecipeView extends Component {
       <View>
         <Alert />
         <ScrollView>
-          <View style={styles.image}>
-            <Image
-              source={{
-                uri: this.props.recipe.heroImage ? this.props.recipe.heroImage.replace('w:2000', 'w:600') :
-                'http://timgratton.com/wp-content/uploads/2018/01/placeholder-600x400.png',
-              }}
-              style={styles.image}
-            />
-            <BottomGradient />
-            <Text style={styles.duration}>{this.props.recipe.duration} Min.</Text>
-          </View>
+          <TouchableNativeFeedback onLongPress={this.pickImage}>
+            <View style={styles.image}>
+              <Image
+                source={{
+                  uri: this.props.recipe.heroImage ? this.props.recipe.heroImage.replace('w:2000', 'w:600') :
+                  'http://timgratton.com/wp-content/uploads/2018/01/placeholder-600x400.png',
+                }}
+                style={styles.image}
+              />
+              <BottomGradient />
+              <Text style={styles.duration}>{this.props.recipe.duration} Min.</Text>
+            </View>
+          </TouchableNativeFeedback>
           <Text style={styles.title}>{this.props.recipe.title}</Text>
           <View style={styles.categories}>{categories}</View>
           <Servings
@@ -138,13 +151,6 @@ class RecipeView extends Component {
           >
             {this.props.recipe.description}
           </Markdown>
-          <Button
-            title="Neues Titelbild"
-            textStyle={{ color: colors.white }}
-            buttonStyle={{ height: 50, backgroundColor: colors.primary }}
-            onPress={this.pickImage}
-            containerViewStyle={{ marginTop: 30 }}
-          />
         </ScrollView>
       </View>
     );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Text, StyleSheet, View } from 'react-native';
 import colors from '../../../config/colors';
 
 const styles = StyleSheet.create({
@@ -9,10 +9,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  text: {
+    color: colors.darkGray,
+    fontSize: 18,
+    textAlign: 'center',
+    marginTop: 30,
+  },
 });
 
-export default () => (
+export default props => (
   <View style={styles.container}>
     <ActivityIndicator size="large" color={colors.primary} />
+    {props.message ?
+      <Text style={styles.text}>{props.message}</Text>
+    : null}
   </View>
 );
