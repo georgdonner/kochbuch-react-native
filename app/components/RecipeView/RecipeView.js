@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Image, ScrollView, Text, ToastAndroid, View } from 'react-native';
 import { connect } from 'react-redux';
-import { Icon } from 'react-native-elements';
+import { Button, Icon } from 'react-native-elements';
 import Markdown from 'react-native-simple-markdown';
+import ImagePicker from 'react-native-image-picker';
 import axios from 'axios';
 
 import Alert from '../common/Alert/Alert';
@@ -54,6 +55,30 @@ class RecipeView extends Component {
     } catch (error) {
       ToastAndroid.show('Keine Internetverbindung', ToastAndroid.SHORT);
     }
+  }
+
+  pickImage = () => {
+    const options = {
+      quality: 0.5,
+      allowsEditing: true,
+    };
+    ImagePicker.launchImageLibrary(options, async (response) => {
+      const data = new FormData();
+      data.append('fileUpload', {
+        uri: response.uri,
+        type: response.type,
+        name: response.fileName,
+      });
+      try {
+        const url = 'https://www.filestackapi.com/api/store/S3?key=AwD48ceQaWtGBs9plMog7z';
+        const res = await axios.post(url, data);
+        const handle = res.data.url.split('/').pop();
+        const heroImage = `https://process.filestackapi.com/resize=w:2000,fit:max/quality=value:80/compress/${handle}`;
+        await axios.put(`/recipe/${this.props.recipe._id}`, { heroImage }, { json: true });
+      } catch (error) {
+        console.error(error.message);
+      }
+    });
   }
 
   render() {
@@ -113,6 +138,13 @@ class RecipeView extends Component {
           >
             {this.props.recipe.description}
           </Markdown>
+          <Button
+            title="Neues Titelbild"
+            textStyle={{ color: colors.white }}
+            buttonStyle={{ height: 50, backgroundColor: colors.primary }}
+            onPress={this.pickImage}
+            containerViewStyle={{ marginTop: 30 }}
+          />
         </ScrollView>
       </View>
     );

@@ -3,6 +3,7 @@ package com.kochbuch;
 import com.facebook.react.ReactPackage;
 import com.reactnativenavigation.NavigationApplication;
 import com.BV.LinearGradient.LinearGradientPackage;
+import com.imagepicker.ImagePickerPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +20,7 @@ public class MainApplication extends NavigationApplication {
     // No need to add RnnPackage and MainReactPackage
     return Arrays.<ReactPackage>asList(
       // eg. new VectorIconsPackage()
+      new ImagePickerPackage(),
       new LinearGradientPackage()
     );
   }
