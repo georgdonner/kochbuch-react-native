@@ -17,20 +17,19 @@ import colors from '../../config/colors';
 import styles from './styles';
 
 class RecipeView extends Component {
-  static navigatorButtons = {
-    rightButtons: [{
-      id: 'weekplan',
-      icon: CalendarIcon,
-    }],
-  };
-
   constructor(props) {
     super(props);
     this.state = {
       servings: props.servings || props.recipe.servings,
       uploading: false,
     };
+    if (props.planCode) this.setButtons();
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.planCode && nextProps.planCode) this.setButtons();
+    else if (this.props.planCode && !nextProps.planCode) this.setButtons(false);
   }
 
   onNavigatorEvent = (event) => {
@@ -44,6 +43,15 @@ class RecipeView extends Component {
         });
       }
     }
+  }
+
+  setButtons = (visible = true) => {
+    this.props.navigator.setButtons({
+      rightButtons: visible ? [{
+        id: 'weekplan',
+        icon: CalendarIcon,
+      }] : [],
+    });
   }
 
   addToShoppingList = async (item) => {
@@ -170,6 +178,7 @@ const mapStateToProps = (state, ownProps) => ({
   recipe: state.recipes.find(recipe => recipe._id === ownProps.id),
   recipes: state.recipes,
   listCode: state.settings.shoppingList,
+  planCode: state.settings.weekplan,
   shoppingList: state.user.shoppingList,
 });
 
