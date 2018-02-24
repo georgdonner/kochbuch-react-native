@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 import Markdown from 'react-native-simple-markdown';
 import ImagePicker from 'react-native-image-picker';
+import KeepAwake from 'react-native-keep-awake';
 import axios from 'axios';
 
 import Alert from '../common/Alert/Alert';
@@ -133,6 +134,7 @@ class RecipeView extends Component {
     return (
       <View>
         <Alert />
+        <KeepAwake />
         <ScrollView>
           <TouchableNativeFeedback onLongPress={this.pickImage}>
             <View style={styles.image}>

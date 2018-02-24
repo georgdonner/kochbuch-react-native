@@ -4,6 +4,7 @@ import com.facebook.react.ReactPackage;
 import com.reactnativenavigation.NavigationApplication;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.imagepicker.ImagePickerPackage;
+import com.corbt.keepawake.KCKeepAwakePackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +22,8 @@ public class MainApplication extends NavigationApplication {
     return Arrays.<ReactPackage>asList(
       // eg. new VectorIconsPackage()
       new ImagePickerPackage(),
-      new LinearGradientPackage()
+      new LinearGradientPackage(),
+      new KCKeepAwakePackage()
     );
   }
 
