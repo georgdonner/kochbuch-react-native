@@ -15,11 +15,7 @@ export default (props) => {
   else if (props.recipe.categories.includes('Vegetarisch')) info = 'vegetarisch';
   return (
     <View style={styles.recipe}>
-      <TouchableNativeFeedback
-        onPress={() => {
-          props.navigator.push({ screen: 'my.Recipe', title: props.recipe.title, passProps: { id: props.recipe._id } });
-        }}
-      >
+      <TouchableNativeFeedback onPress={() => props.onPress(props.recipe)}>
         <View>
           <View style={styles.image}>
             <Image

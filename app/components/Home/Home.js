@@ -58,6 +58,10 @@ class Home extends Component {
           navBarHidden: true,
         });
       }
+    } else if (event.id === 'willDisappear') {
+      this.setState({ transition: true });
+    } else if (event.id === 'didDisappear') {
+      this.setState({ transition: false });
     }
   }
 
@@ -75,6 +79,10 @@ class Home extends Component {
     });
   }
 
+  showRecipe = (recipe) => {
+    this.props.navigator.push({ screen: 'my.Recipe', title: recipe.title, passProps: { id: recipe._id } });
+  }
+
   refresh = async () => {
     this.setState({ refreshing: true });
     await this.props.refresh();
@@ -82,7 +90,9 @@ class Home extends Component {
   }
 
   render() {
-    if (!this.state.recipes || !this.props.shoppingList) return <Loading />;
+    if (!this.state.recipes || !this.props.shoppingList || this.state.transition) {
+      return <Loading />;
+    }
     const searchbar = this.state.searchActive ? (
       <Searchbar
         value={this.state.searchValue}
@@ -106,7 +116,7 @@ class Home extends Component {
         <FlatList
           data={this.state.recipes}
           renderItem={
-            ({ item }) => <RecipePreview recipe={item} navigator={this.props.navigator} />
+            ({ item }) => <RecipePreview recipe={item} onPress={this.showRecipe} />
           }
           keyExtractor={item => item._id}
           onRefresh={this.refresh}
