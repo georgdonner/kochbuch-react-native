@@ -170,7 +170,7 @@ class RecipeView extends Component {
             </View>
           </TouchableNativeFeedback>
           <Text style={styles.title}>{this.props.recipe.title}</Text>
-          <View style={styles.categories}>{categories}</View>
+          {categories.length > 0 ? <View style={styles.categories}>{categories}</View> : null}
           <Servings
             servings={this.state.servings}
             onDecrement={() => this.setState({ servings: this.state.servings - 1 || 1 })}
