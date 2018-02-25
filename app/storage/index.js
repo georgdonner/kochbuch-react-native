@@ -21,3 +21,23 @@ export const getSettings = async () => {
   };
   return getItem('settings', defaultSettings);
 };
+
+export const getFavorites = async () => getItem('favorites', []);
+
+export const isFavorite = async (recipeId) => {
+  const favorites = await getFavorites();
+  console.log(favorites);
+  return favorites.includes(recipeId);
+};
+
+export const addToFavorites = async (recipeId) => {
+  const favorites = await getFavorites();
+  const set = new Set(favorites);
+  set.add(recipeId);
+  return setItem([...set], 'favorites');
+};
+
+export const removeFromFavorites = async (recipeId) => {
+  const favorites = await getFavorites();
+  return setItem(favorites.filter(fav => fav !== recipeId), 'favorites');
+};

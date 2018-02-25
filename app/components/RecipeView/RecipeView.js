@@ -13,7 +13,10 @@ import Loading from '../common/Loading/Loading';
 import Servings from '../common/Servings/Servings';
 import calcServings from '../../utils/calcServings';
 import * as actions from '../../actions';
+import { addToFavorites, isFavorite, removeFromFavorites } from '../../storage';
 import CalendarIcon from '../../assets/icons/calendar_black.png';
+import FavoriteIcon from '../../assets/icons/favorite_orange.png';
+import FavoriteBorderIcon from '../../assets/icons/favorite_border_black.png';
 import colors from '../../config/colors';
 import styles from './styles';
 
@@ -21,11 +24,18 @@ class RecipeView extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      favorite: false,
       servings: props.servings || props.recipe.servings,
       uploading: false,
     };
     if (props.planCode) this.setButtons();
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+  }
+
+  async componentDidMount() {
+    const favorite = await isFavorite(this.props.id);
+    this.setState({ favorite: true });
+    this.setButtons(favorite, this.props.planCode);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -42,16 +52,26 @@ class RecipeView extends Component {
           title: 'Neuer Eintrag',
           passProps: { entry: { recipe: { id: _id, title }, servings: this.state.servings } },
         });
+      } else if (event.id === 'favorite') {
+        if (this.state.favorite) removeFromFavorites(this.props.id);
+        else addToFavorites(this.props.id);
+        this.setButtons(!this.state.favorite, this.props.planCode);
+        this.setState({ favorite: !this.state.favorite });
       }
     }
   }
 
-  setButtons = (visible = true) => {
+  setButtons = (favorite, visible = true) => {
+    const buttons = [{
+      id: 'favorite',
+      icon: favorite ? FavoriteIcon : FavoriteBorderIcon,
+    }];
     this.props.navigator.setButtons({
-      rightButtons: visible ? [{
-        id: 'weekplan',
-        icon: CalendarIcon,
-      }] : [],
+      rightButtons: visible ? [
+        { id: 'weekplan', icon: CalendarIcon },
+        ...buttons,
+      ] : buttons,
+      animated: true,
     });
   }
 

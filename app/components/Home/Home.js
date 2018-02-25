@@ -8,7 +8,10 @@ import Searchbar from './Searchbar/Searchbar';
 import Alert from '../common/Alert/Alert';
 import Loading from '../common/Loading/Loading';
 import MessageScreen from '../common/MessageScreen/MessageScreen';
+import FavoriteIcon from '../../assets/icons/favorite_white.png';
+import FavoriteBorderIcon from '../../assets/icons/favorite_border_white.png';
 import SearchIcon from '../../assets/icons/search_white.png';
+import { getFavorites } from '../../storage';
 import * as actions from '../../actions';
 import colors from '../../config/colors';
 import styles from './styles';
@@ -19,10 +22,10 @@ class Home extends Component {
       id: 'sideMenu',
       buttonColor: '#ffffff',
     }],
-    rightButtons: [{
-      id: 'search',
-      icon: SearchIcon,
-    }],
+    rightButtons: [
+      { id: 'search', icon: SearchIcon },
+      { id: 'favorites', icon: FavoriteBorderIcon },
+    ],
   };
 
   static navigatorStyle = {
@@ -33,10 +36,12 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      initialRecipes: [],
       recipes: null,
       refreshing: false,
       searchActive: false,
       searchValue: '',
+      favorites: false,
     };
     this.fuse = null;
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
@@ -51,14 +56,33 @@ class Home extends Component {
     if (this.props.recipes !== nextProps.recipes) this.init(nextProps.recipes);
   }
 
-  onNavigatorEvent = (event) => {
+  onNavigatorEvent = async (event) => {
     if (event.type === 'NavBarButtonPress') {
       if (event.id === 'search') {
         this.setState({ searchActive: true });
         this.props.navigator.setStyle({
           navBarHidden: true,
         });
+      } else if (event.id === 'favorites') {
+        this.props.navigator.setButtons({
+          rightButtons: [
+            { id: 'search', icon: SearchIcon },
+            { id: 'favorites', icon: this.state.favorites ? FavoriteBorderIcon : FavoriteIcon },
+          ],
+          animated: true,
+        });
+        if (this.state.favorites) {
+          this.init(this.props.recipes);
+          this.setState({ favorites: false });
+        } else {
+          const favorites = await getFavorites();
+          this.init(this.props.recipes.filter(recipe => favorites.includes(recipe._id)));
+          this.setState({ favorites: true });
+        }
       }
+    } else if (event.id === 'willAppear' && this.state.favorites) {
+      const favorites = await getFavorites();
+      this.init(this.props.recipes.filter(recipe => favorites.includes(recipe._id)));
     } else if (event.id === 'willDisappear') {
       this.setState({ transition: true });
     } else if (event.id === 'didDisappear') {
@@ -67,17 +91,21 @@ class Home extends Component {
   }
 
   init = (recipes) => {
-    this.setState({ recipes });
-    this.fuse = new Fuse(recipes, {
-      shouldSort: true,
-      threshold: 0.33,
-      keys: [
-        'title',
-        'ingredients.name',
-        'categories',
-      ],
-      minMatchCharLength: 2,
-    });
+    this.setState({ recipes, initialRecipes: recipes });
+    if (!this.fuse) {
+      this.fuse = new Fuse(recipes, {
+        shouldSort: true,
+        threshold: 0.33,
+        keys: [
+          'title',
+          'ingredients.name',
+          'categories',
+        ],
+        minMatchCharLength: 2,
+      });
+    } else {
+      this.fuse.setCollection(recipes);
+    }
   }
 
   showRecipe = (recipe) => {
@@ -98,12 +126,13 @@ class Home extends Component {
       <Searchbar
         value={this.state.searchValue}
         onChange={(searchValue) => {
-          const recipes = searchValue ? this.fuse.search(searchValue) : this.props.recipes;
+          const recipes = searchValue ? this.fuse.search(searchValue) : this.state.initialRecipes;
           this.setState({ recipes, searchValue });
         }}
         onClear={() => this.setState({ searchValue: '' })}
         onBack={() => {
-          this.setState({ searchActive: false, recipes: this.props.recipes });
+          this.setState({ searchActive: false, searchValue: '' });
+          this.init(this.state.initialRecipes);
           this.props.navigator.setStyle({
             navBarHidden: false,
           });
@@ -121,7 +150,7 @@ class Home extends Component {
         refreshing={this.state.refreshing}
         removeClippedSubviews
       />
-    ) : <MessageScreen message="Keine Suchergebnisse gefunden." />;
+    ) : <MessageScreen message="Keine Rezepte gefunden." />;
     return (
       <View style={styles.container}>
         {searchbar}
