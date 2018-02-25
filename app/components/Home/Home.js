@@ -131,11 +131,12 @@ class Home extends Component {
         }}
         onClear={() => this.setState({ searchValue: '' })}
         onBack={() => {
-          this.setState({ searchActive: false, searchValue: '' });
-          this.init(this.state.initialRecipes);
-          this.props.navigator.setStyle({
-            navBarHidden: false,
+          this.setState({ searchActive: false, searchValue: '' }, () => {
+            this.props.navigator.setStyle({
+              navBarHidden: false,
+            });
           });
+          this.init(this.state.initialRecipes);
         }}
       />
     ) : null;
