@@ -5,8 +5,7 @@ import colors from '../../../config/colors';
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
-    width: '100%',
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 30,
@@ -18,9 +17,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default props => (
-  <View style={styles.container}>
-    <Text style={styles.text}>{props.message}</Text>
+export default (props) => {
+  const button = props.buttonText ? (
     <Button
       title={props.buttonText.toUpperCase()}
       textStyle={{ color: colors.white }}
@@ -28,5 +26,11 @@ export default props => (
       onPress={() => props.onPress()}
       containerViewStyle={{ marginTop: 30 }}
     />
-  </View>
-);
+  ) : null;
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>{props.message}</Text>
+      {button}
+    </View>
+  );
+};

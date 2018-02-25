@@ -7,6 +7,7 @@ import RecipePreview from './RecipePreview/RecipePreview';
 import Searchbar from './Searchbar/Searchbar';
 import Alert from '../common/Alert/Alert';
 import Loading from '../common/Loading/Loading';
+import MessageScreen from '../common/MessageScreen/MessageScreen';
 import SearchIcon from '../../assets/icons/search_white.png';
 import * as actions from '../../actions';
 import colors from '../../config/colors';
@@ -109,20 +110,23 @@ class Home extends Component {
         }}
       />
     ) : null;
+    const recipes = this.state.recipes.length > 0 ? (
+      <FlatList
+        data={this.state.recipes}
+        renderItem={
+          ({ item }) => <RecipePreview recipe={item} onPress={this.showRecipe} />
+        }
+        keyExtractor={item => item._id}
+        onRefresh={this.refresh}
+        refreshing={this.state.refreshing}
+        removeClippedSubviews
+      />
+    ) : <MessageScreen message="Keine Suchergebnisse gefunden." />;
     return (
       <View style={styles.container}>
         {searchbar}
         <Alert />
-        <FlatList
-          data={this.state.recipes}
-          renderItem={
-            ({ item }) => <RecipePreview recipe={item} onPress={this.showRecipe} />
-          }
-          keyExtractor={item => item._id}
-          onRefresh={this.refresh}
-          refreshing={this.state.refreshing}
-          removeClippedSubviews
-        />
+        {recipes}
       </View>
     );
   }
