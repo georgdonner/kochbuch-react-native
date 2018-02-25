@@ -4,6 +4,8 @@ import colors from '../../../config/colors';
 export default StyleSheet.create({
   recipe: {
     width: '100%',
+    borderBottomWidth: 3,
+    borderBottomColor: colors.darkGray,
   },
   image: {
     height: 200,
