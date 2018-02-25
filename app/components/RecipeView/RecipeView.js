@@ -40,7 +40,7 @@ class RecipeView extends Component {
         this.props.navigator.push({
           screen: 'my.WeekplanForm',
           title: 'Neuer Eintrag',
-          passProps: { entry: { recipe: { id: _id, title } } },
+          passProps: { entry: { recipe: { id: _id, title }, servings: this.state.servings } },
         });
       }
     }
