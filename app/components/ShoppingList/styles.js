@@ -23,7 +23,5 @@ export default StyleSheet.create({
     fontSize: 18,
     color: colors.darkGray,
     marginBottom: 5,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.lightBorder,
   },
 });

@@ -17,8 +17,6 @@ export default StyleSheet.create({
   input: {
     fontSize: 18,
     color: colors.darkGray,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.lightBorder,
   },
   recipe: {
     marginTop: 10,
