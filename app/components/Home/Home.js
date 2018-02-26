@@ -43,6 +43,7 @@ class Home extends Component {
       searchValue: '',
       favorites: false,
     };
+    this.lastPressedIndex = -1;
     this.fuse = null;
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
@@ -83,6 +84,14 @@ class Home extends Component {
     } else if (event.id === 'willAppear' && this.state.favorites) {
       const favorites = await getFavorites();
       this.init(this.props.recipes.filter(recipe => favorites.includes(recipe._id)));
+    } else if (event.id === 'didAppear') {
+      if (this.lastPressedIndex >= 0) {
+        this.list.scrollToIndex({
+          index: this.lastPressedIndex,
+          animated: false,
+          viewOffset: 0,
+        });
+      }
     } else if (event.id === 'willDisappear') {
       this.setState({ transition: true });
     } else if (event.id === 'didDisappear') {
@@ -142,9 +151,18 @@ class Home extends Component {
     ) : null;
     const recipes = this.state.recipes.length > 0 ? (
       <FlatList
+        ref={(list) => { this.list = list; }}
         data={this.state.recipes}
         renderItem={
-          ({ item }) => <RecipePreview recipe={item} onPress={this.showRecipe} />
+          ({ item, index }) => (
+            <RecipePreview
+              recipe={item}
+              onPress={(recipe) => {
+                this.lastPressedIndex = index;
+                this.showRecipe(recipe);
+              }}
+            />
+          )
         }
         keyExtractor={item => item._id}
         onRefresh={this.refresh}
