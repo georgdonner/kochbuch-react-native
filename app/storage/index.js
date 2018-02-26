@@ -31,12 +31,21 @@ export const isFavorite = async (recipeId) => {
 
 export const addToFavorites = async (recipeId) => {
   const favorites = await getFavorites();
-  const set = new Set(favorites);
-  set.add(recipeId);
+  const set = new Set(favorites).add(recipeId);
   return setItem([...set], 'favorites');
 };
 
 export const removeFromFavorites = async (recipeId) => {
   const favorites = await getFavorites();
   return setItem(favorites.filter(fav => fav !== recipeId), 'favorites');
+};
+
+export const setRemovedListItems = async list => setItem(list, 'removedListItems');
+
+export const getRemovedListItems = async () => getItem('removedListItems', []);
+
+export const removeListItem = async (item) => {
+  const items = await getRemovedListItems();
+  const set = new Set(items).add(item);
+  return setRemovedListItems([...set]);
 };

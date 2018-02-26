@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { RefreshControl, ScrollView, ToastAndroid, View } from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import { connect } from 'react-redux';
 import { CheckBox, FormInput } from 'react-native-elements';
 import axios from 'axios';
@@ -47,26 +47,28 @@ class ShoppingList extends Component {
   async addItem() {
     try {
       const list = this.props.shoppingList.concat([this.state.newItem]);
+      this.props.updateShoppingList(list);
       this.setState({ newItem: '' });
       await axios.put(`/list/${this.props.listCode}`, {
         list,
       });
-      this.props.updateShoppingList(list);
     } catch (error) {
-      ToastAndroid.show('Keine Internetverbindung', ToastAndroid.SHORT);
+      this.props.fetchFailed();
     }
   }
 
   async removeItem(index) {
+    const item = this.props.shoppingList[index];
     try {
       const list = this.props.shoppingList.slice();
       list.splice(index, 1);
+      this.props.updateShoppingList(list);
       await axios.put(`/list/${this.props.listCode}`, {
         list,
       });
-      this.props.updateShoppingList(list);
     } catch (error) {
-      ToastAndroid.show('Keine Internetverbindung', ToastAndroid.SHORT);
+      this.props.fetchFailed();
+      this.props.removeListItemOffline(item);
     }
   }
 
@@ -115,6 +117,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   fetchShoppingList: code => dispatch(actions.fetchShoppingList(code)),
   updateShoppingList: list => dispatch(actions.updateShoppingList(list)),
+  fetchFailed: () => dispatch(actions.fetchFailed()),
+  removeListItemOffline: item => dispatch(actions.removeListItemOffline(item)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShoppingList);

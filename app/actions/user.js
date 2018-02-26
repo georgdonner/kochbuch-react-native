@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { UPDATE_SHOPPING_LIST, UPDATE_WEEKPLAN } from './actionTypes';
-import { setShoppingList, setWeekplan } from '../storage';
+import { REMOVE_LIST_ITEM, UPDATE_SHOPPING_LIST, UPDATE_WEEKPLAN } from './actionTypes';
+import { removeListItem, setShoppingList, setWeekplan } from '../storage';
 
 export const updateShoppingList = (list) => {
   setShoppingList(list);
@@ -23,6 +23,14 @@ export const fetchShoppingList = code => async (dispatch) => {
   } catch (error) {
     console.error(error);
   }
+};
+
+export const removeListItemOffline = (item) => {
+  removeListItem(item);
+  return {
+    type: REMOVE_LIST_ITEM,
+    item,
+  };
 };
 
 export const updateWeekplan = (plan) => {

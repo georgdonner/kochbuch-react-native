@@ -1,12 +1,8 @@
 import axios from 'axios';
 
-import { FETCH_FAILED, FETCH_SUCCESS } from './actionTypes';
-import { getRecipes, getSettings, getShoppingList, getWeekplan } from '../storage';
-import { updateRecipes, updateSettings, updateShoppingList, updateWeekplan } from './index';
-
-const fetchFailed = () => ({ type: FETCH_FAILED });
-
-const fetchSuccess = () => ({ type: FETCH_SUCCESS });
+import { CLEAR_REMOVED_LIST_ITEMS } from './actionTypes';
+import { getRecipes, getSettings, getShoppingList, getWeekplan, setRemovedListItems, getRemovedListItems } from '../storage';
+import { updateRecipes, updateSettings, updateShoppingList, updateWeekplan, fetchFailed, fetchSuccess } from './index';
 
 const readFromStorage = () => async (dispatch) => {
   try {
@@ -21,10 +17,22 @@ const readFromStorage = () => async (dispatch) => {
   }
 };
 
-export default () => async (dispatch) => {
+const clearRemovedItems = () => {
+  setRemovedListItems([]);
+  return { type: CLEAR_REMOVED_LIST_ITEMS };
+};
+
+const getMergedShoppingList = (fetchedList, localList, removedItems) => {
+  const merged = new Set(fetchedList.concat(localList));
+  return [...merged].filter(item => !removedItems.includes(item));
+};
+
+export default () => async (dispatch, getState) => {
   try {
     const settings = await getSettings();
+    const removedListItems = await getRemovedListItems();
     const { shoppingList, weekplan } = settings;
+    const localList = getState().user.shoppingList;
     dispatch(updateSettings(settings));
     const fetches = [];
     fetches.push(axios.get('/recipes'));
@@ -35,9 +43,16 @@ export default () => async (dispatch) => {
     responses.forEach((res) => {
       const { data } = res;
       if (data) {
-        if (data.list) dispatch(updateShoppingList(data.list));
-        else if (data.plan) dispatch(updateWeekplan(data.plan));
-        else if (Array.isArray(data)) dispatch(updateRecipes(data));
+        if (data.list) {
+          const merged = getMergedShoppingList(data.list, localList, removedListItems);
+          axios.put(`/list/${shoppingList}`, { list: merged });
+          dispatch(clearRemovedItems());
+          dispatch(updateShoppingList(merged));
+        } else if (data.plan) {
+          dispatch(updateWeekplan(data.plan));
+        } else if (Array.isArray(data)) {
+          dispatch(updateRecipes(data));
+        }
       }
     });
   } catch (error) {

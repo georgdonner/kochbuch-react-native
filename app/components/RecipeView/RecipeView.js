@@ -91,12 +91,12 @@ class RecipeView extends Component {
     try {
       const list = this.props.shoppingList.concat([item]);
       this.props.updateShoppingList(list);
+      ToastAndroid.show('Zutat hinzugefügt', ToastAndroid.SHORT);
       await axios.put(`/list/${this.props.listCode}`, {
         list,
       });
-      ToastAndroid.show('Zutat hinzugefügt', ToastAndroid.SHORT);
     } catch (error) {
-      ToastAndroid.show('Keine Internetverbindung', ToastAndroid.SHORT);
+      this.props.fetchFailed();
     }
   }
 
@@ -217,6 +217,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  fetchFailed: () => dispatch(actions.fetchFailed()),
   updateRecipes: recipes => dispatch(actions.updateRecipes(recipes)),
   updateShoppingList: list => dispatch(actions.updateShoppingList(list)),
 });
