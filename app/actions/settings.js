@@ -1,6 +1,6 @@
 import { UPDATE_SETTINGS } from './actionTypes';
 
-export const updateSettings = settings => ({
+export default settings => ({
   type: UPDATE_SETTINGS,
   settings,
 });

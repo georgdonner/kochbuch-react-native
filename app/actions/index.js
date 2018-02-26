@@ -1,5 +1,7 @@
+import settings from './settings';
+
 export { fetchRecipes, updateRecipes } from './recipes';
-export { updateSettings } from './settings';
+export const updateSettings = settings;
 export {
   fetchShoppingList,
   updateShoppingList,

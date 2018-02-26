@@ -26,7 +26,6 @@ export const getFavorites = async () => getItem('favorites', []);
 
 export const isFavorite = async (recipeId) => {
   const favorites = await getFavorites();
-  console.log(favorites);
   return favorites.includes(recipeId);
 };
 

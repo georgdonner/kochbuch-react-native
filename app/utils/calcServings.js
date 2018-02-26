@@ -73,7 +73,6 @@ const convertMetrics = (ingr, qty, newQty) => {
 
   // check which unit and if new quantity reaches breakpoint
   if (metricString.match(/[^k][g]/i) && newQty >= 1000) {
-    console.log('to kg');
     return ingr
       .replace(getQuantityString(ingr), newQty / 1000)
       .replace(/[g]/i, 'kg');
