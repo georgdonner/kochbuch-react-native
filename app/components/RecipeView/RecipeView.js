@@ -28,19 +28,22 @@ class RecipeView extends Component {
       uploading: false,
       itemsAdded: 0,
     };
-    if (props.planCode) this.setButtons();
+    this.lastImagePress = Date.now();
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
 
   async componentDidMount() {
     const favorite = await isFavorite(this.props.id);
-    this.setState({ favorite: true });
+    this.setState({ favorite });
     this.setButtons(favorite, this.props.planCode);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.props.planCode && nextProps.planCode) this.setButtons();
-    else if (this.props.planCode && !nextProps.planCode) this.setButtons(false);
+    if (!this.props.planCode && nextProps.planCode) {
+      this.setButtons(this.state.favorite);
+    } else if (this.props.planCode && !nextProps.planCode) {
+      this.setButtons(this.state.favorite, false);
+    }
   }
 
   onNavigatorEvent = (event) => {
@@ -53,10 +56,7 @@ class RecipeView extends Component {
           passProps: { entry: { recipe: { id: _id, title }, servings: this.state.servings } },
         });
       } else if (event.id === 'favorite') {
-        if (this.state.favorite) removeFromFavorites(this.props.id);
-        else addToFavorites(this.props.id);
-        this.setButtons(!this.state.favorite, this.props.planCode);
-        this.setState({ favorite: !this.state.favorite });
+        this.toggleFavorite();
       } else if (event.id === 'share') {
         const url = `${axios.defaults.baseURL.replace('api', '')}recipe/${_id}`;
         Share.share({
@@ -64,6 +64,11 @@ class RecipeView extends Component {
         });
       }
     }
+  }
+
+  onImagePress = () => {
+    if (Date.now() - this.lastImagePress < 250 && !this.state.favorite) this.toggleFavorite();
+    this.lastImagePress = Date.now();
   }
 
   setButtons = (favorite, visible = true) => {
@@ -86,6 +91,13 @@ class RecipeView extends Component {
       ] : buttons,
       animated: true,
     });
+  }
+
+  toggleFavorite = () => {
+    if (this.state.favorite) removeFromFavorites(this.props.id);
+    else addToFavorites(this.props.id);
+    this.setButtons(!this.state.favorite, this.props.planCode);
+    this.setState({ favorite: !this.state.favorite });
   }
 
   showItemAddedToast = () => {
@@ -175,7 +187,7 @@ class RecipeView extends Component {
         <Alert />
         <KeepAwake />
         <ScrollView>
-          <TouchableNativeFeedback onLongPress={this.pickImage}>
+          <TouchableNativeFeedback onPress={this.onImagePress} onLongPress={this.pickImage}>
             <View style={styles.image}>
               <Image
                 source={{
