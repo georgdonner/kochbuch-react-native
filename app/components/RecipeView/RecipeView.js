@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, ScrollView, Text, ToastAndroid, TouchableNativeFeedback, View } from 'react-native';
+import { Image, ScrollView, Share, Text, ToastAndroid, TouchableNativeFeedback, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 import Markdown from 'react-native-simple-markdown';
@@ -14,7 +14,6 @@ import Servings from '../common/Servings/Servings';
 import calcServings from '../../utils/calcServings';
 import * as actions from '../../actions';
 import { addToFavorites, isFavorite, removeFromFavorites } from '../../storage';
-import CalendarIcon from '../../assets/icons/calendar_black.png';
 import FavoriteIcon from '../../assets/icons/favorite_orange.png';
 import FavoriteBorderIcon from '../../assets/icons/favorite_border_black.png';
 import colors from '../../config/colors';
@@ -45,8 +44,8 @@ class RecipeView extends Component {
 
   onNavigatorEvent = (event) => {
     if (event.type === 'NavBarButtonPress') {
+      const { title, _id } = this.props.recipe;
       if (event.id === 'weekplan') {
-        const { title, _id } = this.props.recipe;
         this.props.navigator.push({
           screen: 'my.WeekplanForm',
           title: 'Neuer Eintrag',
@@ -57,18 +56,31 @@ class RecipeView extends Component {
         else addToFavorites(this.props.id);
         this.setButtons(!this.state.favorite, this.props.planCode);
         this.setState({ favorite: !this.state.favorite });
+      } else if (event.id === 'share') {
+        const url = `${axios.defaults.baseURL.replace('api', '')}recipe/${_id}`;
+        Share.share({
+          message: `${title} - ${url}`,
+        });
       }
     }
   }
 
   setButtons = (favorite, visible = true) => {
-    const buttons = [{
-      id: 'favorite',
-      icon: favorite ? FavoriteIcon : FavoriteBorderIcon,
-    }];
+    const buttons = [
+      {
+        id: 'favorite',
+        icon: favorite ? FavoriteIcon : FavoriteBorderIcon,
+        showAsAction: 'always',
+      },
+      {
+        id: 'share',
+        title: 'Teilen',
+        showAsAction: 'never',
+      },
+    ];
     this.props.navigator.setButtons({
       rightButtons: visible ? [
-        { id: 'weekplan', icon: CalendarIcon },
+        { id: 'weekplan', title: 'Zum Wochenplan', showAsAction: 'never' },
         ...buttons,
       ] : buttons,
       animated: true,
