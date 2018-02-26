@@ -29,6 +29,7 @@ class ShoppingList extends Component {
     super(props);
     this.state = {
       newItem: '',
+      editItemIndex: -1,
       refreshing: false,
     };
   }
@@ -45,15 +46,20 @@ class ShoppingList extends Component {
   )
 
   async addItem() {
-    try {
-      const list = this.props.shoppingList.concat([this.state.newItem]);
+    const { editItemIndex, newItem } = this.state;
+    if (newItem !== '') {
+      const list = this.props.shoppingList.slice();
+      if (editItemIndex !== -1) list[editItemIndex] = newItem;
+      else list.push(newItem);
       this.props.updateShoppingList(list);
-      this.setState({ newItem: '' });
-      await axios.put(`/list/${this.props.listCode}`, {
-        list,
-      });
-    } catch (error) {
-      this.props.fetchFailed();
+      this.setState({ newItem: '', editItemIndex: -1 });
+      try {
+        await axios.put(`/list/${this.props.listCode}`, {
+          list,
+        });
+      } catch (error) {
+        this.props.fetchFailed();
+      }
     }
   }
 
@@ -89,6 +95,7 @@ class ShoppingList extends Component {
         textStyle={styles.text}
         containerStyle={styles.checkbox}
         onIconPress={() => this.removeItem(index)}
+        onLongPress={() => this.setState({ newItem: item.trim(), editItemIndex: index })}
       />
     ));
     return (
