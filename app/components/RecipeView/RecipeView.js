@@ -26,6 +26,7 @@ class RecipeView extends Component {
       favorite: false,
       servings: props.servings || props.recipe.servings,
       uploading: false,
+      itemsAdded: 0,
     };
     if (props.planCode) this.setButtons();
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
@@ -87,11 +88,17 @@ class RecipeView extends Component {
     });
   }
 
+  showItemAddedToast = () => {
+    const itemsAdded = this.state.itemsAdded + 1;
+    this.setState({ itemsAdded });
+    ToastAndroid.show(`${itemsAdded} Zutat${itemsAdded > 1 ? 'en' : ''} hinzugefügt`, ToastAndroid.SHORT);
+  }
+
   addToShoppingList = async (item) => {
     try {
       const list = this.props.shoppingList.concat([item]);
       this.props.updateShoppingList(list);
-      ToastAndroid.show('Zutat hinzugefügt', ToastAndroid.SHORT);
+      this.showItemAddedToast();
       await axios.put(`/list/${this.props.listCode}`, {
         list,
       });
