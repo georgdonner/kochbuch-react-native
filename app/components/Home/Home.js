@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, Linking, View } from 'react-native';
 import { connect } from 'react-redux';
 import Fuse from 'fuse.js';
 
@@ -42,6 +42,7 @@ class Home extends Component {
       searchActive: false,
       searchValue: '',
       favorites: false,
+      deepLinkedRecipeId: null,
     };
     this.lastPressedIndex = -1;
     this.fuse = null;
@@ -51,10 +52,29 @@ class Home extends Component {
   componentDidMount() {
     const { recipes } = this.props;
     if (recipes) this.init(recipes);
+    Linking.addEventListener('url', async (event) => {
+      const parts = event.url.split('/');
+      const lastPart = parts.pop();
+      if (parts[parts.length - 1] === 'recipe') {
+        if (this.props.recipes) {
+          const recipe = this.props.recipes.find(r => r._id === lastPart);
+          if (recipe) this.showRecipe(recipe);
+        } else {
+          this.setState({ deepLinkedRecipeId: lastPart });
+        }
+      } else {
+        const isVisible = await this.props.navigator.screenIsCurrentlyVisible();
+        if (!isVisible) this.props.navigator.resetTo({ screen: 'my.HomeScreen', title: 'Rezepte' });
+      }
+    });
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.recipes !== nextProps.recipes) this.init(nextProps.recipes);
+    if (!this.props.recipes && nextProps.recipes && this.state.deepLinkedRecipeId) {
+      const recipe = nextProps.recipes.find(r => r._id === this.state.deepLinkedRecipeId);
+      if (recipe) this.showRecipe(recipe);
+    }
   }
 
   onNavigatorEvent = async (event) => {

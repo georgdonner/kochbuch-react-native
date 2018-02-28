@@ -20,12 +20,50 @@
       android:theme="@style/AppTheme">
       <activity
         android:name=".MainActivity"
+        android:launchMode="singleTask"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:windowSoftInputMode="adjustResize">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        <intent-filter android:label="Kochbuch">
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data
+              android:scheme="https"
+              android:host="georgs-recipes.herokuapp.com"
+              android:path="" />
+            <data
+              android:scheme="https"
+              android:host="georgs-recipes.herokuapp.com"
+              android:path="/" />
+            <data
+              android:scheme="https"
+              android:host="georgs-recipes.herokuapp.com"
+              android:path="/recipes" />
+            <data
+              android:scheme="https"
+              android:host="georgs-recipes.herokuapp.com"
+              android:pathPrefix="/recipe" />
+            <data
+              android:scheme="http"
+              android:host="kochbuch.georgdonner.de"
+              android:path="" />
+            <data
+              android:scheme="http"
+              android:host="kochbuch.georgdonner.de"
+              android:path="/" />
+            <data
+              android:scheme="http"
+              android:host="kochbuch.georgdonner.de"
+              android:path="/recipes" />
+            <data
+              android:scheme="http"
+              android:host="kochbuch.georgdonner.de"
+              android:pathPrefix="/recipe" />
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
