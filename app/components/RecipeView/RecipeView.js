@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, ScrollView, Share, Text, ToastAndroid, TouchableNativeFeedback, View } from 'react-native';
+import { Image, Linking, ScrollView, Share, Text, ToastAndroid, TouchableNativeFeedback, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 import Markdown from 'react-native-simple-markdown';
@@ -62,6 +62,9 @@ class RecipeView extends Component {
         Share.share({
           message: `${title} - ${url}`,
         });
+      } else if (event.id === 'pdf') {
+        const url = `${axios.defaults.baseURL.replace('api', 'pdf')}/recipe/${_id}`;
+        Linking.openURL(url);
       }
     }
   }
@@ -79,6 +82,11 @@ class RecipeView extends Component {
         showAsAction: 'always',
       },
       {
+        id: 'pdf',
+        title: 'Als PDF speichern',
+        showAsAction: 'never',
+      },
+      {
         id: 'share',
         title: 'Teilen',
         showAsAction: 'never',
@@ -86,8 +94,8 @@ class RecipeView extends Component {
     ];
     this.props.navigator.setButtons({
       rightButtons: visible ? [
-        { id: 'weekplan', title: 'Zum Wochenplan', showAsAction: 'never' },
         ...buttons,
+        { id: 'weekplan', title: 'Zum Wochenplan', showAsAction: 'never' },
       ] : buttons,
       animated: true,
     });
