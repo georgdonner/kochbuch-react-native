@@ -165,20 +165,20 @@ class Weekplan extends Component {
     return (
       <View>
         <Alert />
+        <View style={styles.weekNav}>
+          <Icon
+            name="arrow-back"
+            color={colors.darkGray}
+            onPress={() => this.setState({ week: this.state.week - 1 })}
+          />
+          <Text style={styles.weekNavText}>{this.weekText()}</Text>
+          <Icon
+            name="arrow-forward"
+            color={colors.darkGray}
+            onPress={() => this.setState({ week: this.state.week + 1 })}
+          />
+        </View>
         <ScrollView refreshControl={this.getRefresher()}>
-          <View style={styles.weekNav}>
-            <Icon
-              name="arrow-back"
-              color={colors.darkGray}
-              onPress={() => this.setState({ week: this.state.week - 1 })}
-            />
-            <Text style={styles.weekNavText}>{this.weekText()}</Text>
-            <Icon
-              name="arrow-forward"
-              color={colors.darkGray}
-              onPress={() => this.setState({ week: this.state.week + 1 })}
-            />
-          </View>
           {week}
         </ScrollView>
       </View>
