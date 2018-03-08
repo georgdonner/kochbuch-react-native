@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   text: {
-    color: colors.darkGray,
+    color: colors.gray1,
     fontSize: 18,
     textAlign: 'center',
   },

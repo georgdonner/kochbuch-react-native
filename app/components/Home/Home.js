@@ -3,7 +3,7 @@ import { FlatList, Linking, View } from 'react-native';
 import { connect } from 'react-redux';
 import Fuse from 'fuse.js';
 
-import RecipePreview from './RecipePreview/RecipePreview';
+import RecipePreview, { MIN_HEIGHT } from './RecipePreview/RecipePreview';
 import Searchbar from './Searchbar/Searchbar';
 import Alert from '../common/Alert/Alert';
 import Loading from '../common/Loading/Loading';
@@ -45,6 +45,7 @@ class Home extends Component {
       deepLinkedRecipeId: null,
     };
     this.lastPressedIndex = -1;
+    this.initialNumToRender = 3;
     this.fuse = null;
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
@@ -105,12 +106,23 @@ class Home extends Component {
       const favorites = await getFavorites();
       this.init(this.props.recipes.filter(recipe => favorites.includes(recipe._id)));
     } else if (event.id === 'didAppear') {
-      if (this.lastPressedIndex >= 0) {
+      if (this.lastPressedIndex >= 0 && this.lastPressedIndex <= 15) {
         this.list.scrollToIndex({
           index: this.lastPressedIndex,
           animated: false,
           viewOffset: 0,
         });
+      } else if (this.lastPressedIndex > 15) {
+        const offset = this.props.recipes
+          .slice(0, this.lastPressedIndex)
+          .reduce((acc, recipe) => {
+            let height = MIN_HEIGHT;
+            if (recipe.categories.length === 0) height -= 20;
+            if (recipe.title.length > 26) height += 33;
+            if (recipe.title.length > 50) height += 33;
+            return acc + height;
+          }, 0) - 75;
+        this.list.scrollToOffset({ offset, animated: false });
       }
     } else if (event.id === 'willDisappear') {
       this.setState({ transition: true });
@@ -178,6 +190,7 @@ class Home extends Component {
             <RecipePreview
               recipe={item}
               onPress={(recipe) => {
+                this.initialNumToRender = index + 1;
                 this.lastPressedIndex = index;
                 this.showRecipe(recipe);
               }}
@@ -187,7 +200,7 @@ class Home extends Component {
         keyExtractor={item => item._id}
         onRefresh={this.refresh}
         refreshing={this.state.refreshing}
-        removeClippedSubviews
+        initialNumToRender={this.initialNumToRender}
       />
     ) : <MessageScreen message="Keine Rezepte gefunden." />;
     return (

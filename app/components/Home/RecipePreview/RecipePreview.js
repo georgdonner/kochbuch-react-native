@@ -4,6 +4,8 @@ import { Image, Text, TouchableNativeFeedback, View } from 'react-native';
 import BottomGradient from '../../common/BottomGradient/BottomGradient';
 import styles from './styles';
 
+export const MIN_HEIGHT = 307.5;
+
 export default (props) => {
   const categories = props.recipe.categories
     .filter(cat => cat !== 'Vegan' && cat !== 'Vegetarisch')
