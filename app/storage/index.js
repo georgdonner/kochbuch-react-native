@@ -18,6 +18,7 @@ export const getSettings = async () => {
   const defaultSettings = {
     shoppingList: '',
     weekplan: '',
+    autoScroll: true,
   };
   return getItem('settings', defaultSettings);
 };

@@ -9,4 +9,16 @@ export default StyleSheet.create({
     fontSize: 18,
     color: colors.darkGray,
   },
+  checkbox: {
+    borderWidth: 0,
+    padding: 2,
+    margin: 5,
+    marginTop: 20,
+    marginLeft: 20,
+  },
+  description: {
+    marginVertical: 5,
+    marginHorizontal: 25,
+    color: colors.gray2,
+  },
 });

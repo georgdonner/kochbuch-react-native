@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
 import { connect } from 'react-redux';
-import { Button, FormLabel, FormInput } from 'react-native-elements';
+import { Button, CheckBox, FormLabel, FormInput } from 'react-native-elements';
 
 import * as actions from '../../actions';
 import { setSettings } from '../../storage';
@@ -24,6 +24,7 @@ class Settings extends Component {
 
   updateSettings = async () => {
     const settings = {
+      ...this.state,
       shoppingList: this.formatCode(this.state.shoppingList),
       weekplan: this.formatCode(this.state.weekplan),
     };
@@ -54,6 +55,20 @@ class Settings extends Component {
           value={this.state.weekplan}
           inputStyle={styles.input}
         />
+        <CheckBox
+          title="Scrollposition merken"
+          textStyle={styles.input}
+          iconType="material"
+          checkedIcon="check-box"
+          uncheckedIcon="check-box-outline-blank"
+          checkedColor={colors.gray1}
+          containerStyle={styles.checkbox}
+          checked={this.state.autoScroll}
+          onPress={() => this.setState({ autoScroll: !this.state.autoScroll })}
+        />
+        <Text style={styles.description}>
+          Deaktivieren, falls die Ladezeit zurück zu allen Rezepten zu lang ist.
+        </Text>
         <Button
           title="SPEICHERN"
           textStyle={{ color: colors.white }}

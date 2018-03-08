@@ -112,8 +112,8 @@ class Home extends Component {
           animated: false,
           viewOffset: 0,
         });
-      } else if (this.lastPressedIndex > 15) {
-        const offset = this.props.recipes
+      } else if (this.lastPressedIndex > 15 && this.props.autoScroll) {
+        const offset = this.state.recipes
           .slice(0, this.lastPressedIndex)
           .reduce((acc, recipe) => {
             let height = MIN_HEIGHT;
@@ -214,6 +214,7 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => ({
+  autoScroll: state.settings.autoScroll,
   recipes: state.recipes,
   shoppingList: state.user.shoppingList,
   fetchFailed: state.status.fetchFailed,
