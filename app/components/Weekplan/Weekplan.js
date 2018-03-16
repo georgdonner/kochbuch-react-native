@@ -163,7 +163,7 @@ class Weekplan extends Component {
       />
     ));
     return (
-      <View>
+      <View style={{ flex: 1 }}>
         <Alert />
         <View style={styles.weekNav}>
           <Icon
