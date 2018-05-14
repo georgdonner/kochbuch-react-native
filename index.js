@@ -27,6 +27,7 @@ Navigation.startSingleScreenApp({
     navigatorStyle: {
       navBarBackgroundColor: colors.primary,
       navBarTextColor: colors.white,
+      statusBarColor: colors.primaryDark,
     },
   },
   drawer: {
