@@ -20,6 +20,13 @@ import colors from '../../config/colors';
 import styles from './styles';
 
 class RecipeView extends Component {
+  static navigatorStyle = {
+    navBarBackgroundColor: colors.white,
+    navBarTextColor: colors.darkGray,
+    statusBarColor: colors.lightBorder,
+    statusBarTextColorScheme: 'dark',
+  };
+
   constructor(props) {
     super(props);
     this.state = {
