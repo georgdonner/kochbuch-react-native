@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -6,6 +6,7 @@
         <item name="colorPrimary">#ff560f</item>
         <!-- Details color -->
         <item name="colorAccent">#19161a</item>
+        <item name="android:scrollbarThumbVertical">@drawable/scrollbar_vertical_thumb</item>
     </style>
-
+ 
 </resources>
