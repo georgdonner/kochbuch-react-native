@@ -32,6 +32,18 @@ class ShoppingList extends Component {
       editItemIndex: -1,
       refreshing: false,
     };
+    this.interval = null;
+    this.view = null;
+  }
+
+  componentDidMount() {
+    this.interval = setInterval(() => {
+      this.view.flashScrollIndicators();
+    }, 100);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   getRefresher = () => (
@@ -101,16 +113,22 @@ class ShoppingList extends Component {
     return (
       <View>
         <Alert />
-        <FormInput
-          autoFocus
-          placeholder="Hinzufügen"
-          inputStyle={styles.input}
-          underlineColorAndroid="transparent"
-          value={this.state.newItem}
-          onChangeText={text => this.setState({ newItem: text })}
-          onSubmitEditing={() => this.addItem()}
-        />
-        <ScrollView refreshControl={this.getRefresher()} contentContainerStyle={styles.container}>
+        <ScrollView
+          ref={(view) => { this.view = view; }}
+          refreshControl={this.getRefresher()}
+          contentContainerStyle={styles.container}
+          stickyHeaderIndices={[0]}
+        >
+          <FormInput
+            autoFocus
+            showsVerticalScrollIndicator
+            placeholder="Hinzufügen"
+            inputStyle={styles.input}
+            underlineColorAndroid="transparent"
+            value={this.state.newItem}
+            onChangeText={text => this.setState({ newItem: text })}
+            onSubmitEditing={() => this.addItem()}
+          />
           {list}
         </ScrollView>
       </View>

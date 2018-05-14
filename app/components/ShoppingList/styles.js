@@ -3,7 +3,8 @@ import colors from '../../config/colors';
 
 export default StyleSheet.create({
   container: {
-    marginTop: 5,
+    // marginTop: -55,
+    // paddingTop: 60,
   },
   text: {
     fontFamily: 'sans-serif-condensed',
@@ -24,5 +25,8 @@ export default StyleSheet.create({
     color: colors.darkGray,
     borderBottomWidth: 1,
     borderBottomColor: colors.lightGray,
+    marginBottom: 5,
+    zIndex: 10,
+    backgroundColor: colors.white,
   },
 });
