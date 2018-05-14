@@ -3,18 +3,19 @@ import colors from '../../config/colors';
 
 export default StyleSheet.create({
   container: {
-    // marginTop: -55,
-    // paddingTop: 60,
+    backgroundColor: colors.white,
   },
   text: {
     fontFamily: 'sans-serif-condensed',
     fontSize: 18,
     color: colors.darkGray,
+    backgroundColor: colors.white,
     fontWeight: 'normal',
     paddingLeft: 5,
     paddingVertical: 0,
   },
   checkbox: {
+    backgroundColor: colors.white,
     borderWidth: 0,
     padding: 2,
     margin: 5,
