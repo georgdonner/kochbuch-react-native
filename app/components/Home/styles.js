@@ -6,4 +6,12 @@ export default StyleSheet.create({
     width: '100%',
     flex: 1,
   },
+  icon: {
+    position: 'absolute',
+    height: 50,
+    width: 50,
+    right: 10,
+    bottom: 15,
+    zIndex: 50,
+  },
 });

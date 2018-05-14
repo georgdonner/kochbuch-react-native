@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { FlatList, Linking, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import Fuse from 'fuse.js';
 
@@ -44,6 +45,7 @@ class Home extends Component {
       searchValue: '',
       favorites: false,
       deepLinkedRecipeId: null,
+      vegetarian: false,
     };
     this.lastPressedIndex = -1;
     this.initialNumToRender = 3;
@@ -206,6 +208,25 @@ class Home extends Component {
     ) : <MessageScreen message="Keine Rezepte gefunden." />;
     return (
       <View style={styles.container}>
+        <Icon
+          reverse
+          raised
+          name="leaf"
+          type="material-community"
+          color={this.state.vegetarian ? colors.white : colors.primary}
+          iconStyle={{ color: this.state.vegetarian ? colors.primary : colors.white }}
+          containerStyle={styles.icon}
+          onPress={() => {
+            const { vegetarian } = this.state;
+            const updatedRecipes = vegetarian ?
+              this.state.initialRecipes :
+              this.state.initialRecipes.filter(r => r.categories.includes('Vegetarisch'));
+            this.setState({
+              vegetarian: !vegetarian,
+              recipes: updatedRecipes,
+            });
+          }}
+        />
         {searchbar}
         <Alert />
         {recipes}
