@@ -101,14 +101,16 @@ class ShoppingList extends Component {
     return (
       <View>
         <Alert />
+        <FormInput
+          autoFocus
+          placeholder="Hinzufügen"
+          inputStyle={styles.input}
+          underlineColorAndroid="transparent"
+          value={this.state.newItem}
+          onChangeText={text => this.setState({ newItem: text })}
+          onSubmitEditing={() => this.addItem()}
+        />
         <ScrollView refreshControl={this.getRefresher()} contentContainerStyle={styles.container}>
-          <FormInput
-            placeholder="Hinzufügen"
-            inputStyle={styles.input}
-            value={this.state.newItem}
-            onChangeText={text => this.setState({ newItem: text })}
-            onSubmitEditing={() => this.addItem()}
-          />
           {list}
         </ScrollView>
       </View>
