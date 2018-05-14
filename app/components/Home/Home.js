@@ -31,6 +31,7 @@ class Home extends Component {
   static navigatorStyle = {
     navBarBackgroundColor: colors.primary,
     navBarTextColor: colors.white,
+    statusBarColor: colors.primaryDark,
   };
 
   constructor(props) {

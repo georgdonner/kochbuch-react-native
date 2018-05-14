@@ -13,6 +13,7 @@ class Settings extends Component {
     navBarBackgroundColor: colors.primary,
     navBarTextColor: colors.white,
     navBarButtonColor: colors.white,
+    statusBarColor: colors.primaryDark,
   };
 
   constructor(props) {
