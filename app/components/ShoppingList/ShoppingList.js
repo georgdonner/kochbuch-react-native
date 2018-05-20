@@ -39,7 +39,9 @@ class ShoppingList extends Component {
 
   componentDidMount() {
     this.interval = setInterval(() => {
-      this.view.flashScrollIndicators();
+      if (this.view) {
+        this.view.flashScrollIndicators();
+      }
     }, 100);
   }
 
